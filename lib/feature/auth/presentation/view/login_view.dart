@@ -1,21 +1,21 @@
-import 'package:finalproject/screen/register_screen.dart';
+import 'package:finalproject/feature/auth/presentation/view/register_view.dart';
+import 'package:finalproject/feature/auth/presentation/viewmodel/auth_view_model.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:finalproject/model/colors.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../feature/auth/presentation/viewmodel/auth_view_model.dart';
-import 'dashboard_screen.dart';
 
-class SignIn extends ConsumerStatefulWidget {
-  const SignIn({super.key});
+class LoginView extends ConsumerStatefulWidget {
+  const LoginView({super.key});
 
   @override
-  ConsumerState<SignIn> createState() => _SignInState();
+  ConsumerState<LoginView> createState() => _LoginViewState();
 }
 
-class _SignInState extends ConsumerState<SignIn> {
+class _LoginViewState extends ConsumerState<LoginView> {
   final _formKey = GlobalKey<FormState>();
+
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
 
@@ -61,29 +61,29 @@ class _SignInState extends ConsumerState<SignIn> {
                   Text.rich(
                     textAlign:TextAlign.center,
                     TextSpan(
-                        text: "Don't have an Account? ",
-                        style: TextStyle(
-                          color: textColor2,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 15,
-                        ),
+                      text: "Don't have an Account? ",
+                      style: TextStyle(
+                        color: textColor2,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 15,
+                      ),
 
-                        children: [
-                          TextSpan(
+                      children: [
+                        TextSpan(
                           text: "Signup",
                           style: const TextStyle(
                             color: Colors.orangeAccent,
                             fontWeight: FontWeight.bold,
-                            ),
-                            recognizer: TapGestureRecognizer()
-                              ..onTap=(){
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(builder: (context) => const RegisterScreen()),
-                            );
-                              },
                           ),
-                        ],
+                          recognizer: TapGestureRecognizer()
+                            ..onTap=(){
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(builder: (context) => const RegisterView()),
+                              );
+                            },
+                        ),
+                      ],
                     ),
                   ),
 
@@ -97,21 +97,21 @@ class _SignInState extends ConsumerState<SignIn> {
                     child: TextField(
                       controller: _emailController,
                       decoration: InputDecoration(
-                          contentPadding: const EdgeInsets.symmetric(
-                            horizontal: 20,
-                            vertical: 22,
-                          ),
-                          fillColor: Colors.white,
-                          filled: true,
-                          border: OutlineInputBorder(
-                            borderSide: BorderSide.none,
-                            borderRadius: BorderRadius.circular(15),
-                          ),
-                          hintText: 'Email',
-                          hintStyle: const TextStyle(
-                            color: Colors.black45,
-                            fontSize: 19,
-                          ),
+                        contentPadding: const EdgeInsets.symmetric(
+                          horizontal: 20,
+                          vertical: 22,
+                        ),
+                        fillColor: Colors.white,
+                        filled: true,
+                        border: OutlineInputBorder(
+                          borderSide: BorderSide.none,
+                          borderRadius: BorderRadius.circular(15),
+                        ),
+                        hintText: 'Email',
+                        hintStyle: const TextStyle(
+                          color: Colors.black45,
+                          fontSize: 19,
+                        ),
                         suffixIcon: Icon(
                           Icons.email,
                           size: 25,
@@ -191,12 +191,12 @@ class _SignInState extends ConsumerState<SignIn> {
                               ),
                             ),
                             child: const Text("Sign In",
-                            style: TextStyle(
-                                fontSize:20,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.white
+                              style: TextStyle(
+                                  fontSize:20,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.white
+                              ),
                             ),
-                          ),
                           ),
                         ),
                         SizedBox(height: size.height * 0.03),
@@ -286,22 +286,32 @@ class _SignInState extends ConsumerState<SignIn> {
                         ),
 
                         SizedBox(height: size.height * 0.07),
-                        Text.rich(
-                          TextSpan(
-                              text: "Not a member? ",
-                              style: TextStyle(
-                                color: textColor2,
-                                fontWeight: FontWeight.bold,
-                                fontSize: 15,
-                              ),
-                              children: const [ TextSpan(
-                                text: "Register now",
-                                style: TextStyle(
-                                  color: Colors.blue,
-                                  fontWeight: FontWeight.bold,
-                                ),)]
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        const Text(
+                          "Don't have an account?",
+                          style: TextStyle(
+                            color: Colors.black,
+                            fontSize: 16,
                           ),
                         ),
+                        TextButton(
+                          onPressed: () {
+                            ref.read(authViewModelProvider.notifier).openRegisterView();
+                            // navigate to the signup page
+                          },
+                          child: const Text(
+                            "Sign Up",
+                            style: TextStyle(
+                              color: Colors.lightBlueAccent,
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
                       ],
                     ),
                   ),

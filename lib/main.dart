@@ -1,23 +1,16 @@
-import 'package:finalproject/screen/dashboard_screen.dart';
-import 'package:finalproject/screen/first_screen.dart';
-import 'package:finalproject/screen/register_screen.dart';
-import 'package:finalproject/screen/log_in_screen.dart';
-import 'package:finalproject/screen/splash_screen.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-void main(){
-  runApp(const MyApp());
-}
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+import 'app/app.dart';
+import 'core/networking/local/hive_service.dart';
 
-  @override
-  Widget build(BuildContext context) {
-    return const MaterialApp(
-      debugShowCheckedModeBanner: false,
-      home:SignIn() ,
-    );
-  }
+void main() async{
+  WidgetsFlutterBinding.ensureInitialized();
+  await HiveService().init();
+  runApp(
+    const ProviderScope(
+      child: App(),
+    ),
+  );
 }
