@@ -30,13 +30,13 @@ class _HomeViewState extends ConsumerState<HomeView> {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        title: const Text("FundNepal"),
+        title: const Text("BeSushi Pokebowl"),
       ),
       body: lstBottomScreen[_selectedIndex],
       bottomNavigationBar: BottomNavigationBar(
         type: BottomNavigationBarType
             .fixed, // it will fix the issue if we add 4 items
-        backgroundColor: Colors.lightBlue,
+        backgroundColor: Colors.pinkAccent,
         selectedItemColor: Colors.white,
         items: const [
           BottomNavigationBarItem(

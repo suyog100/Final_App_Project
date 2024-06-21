@@ -29,7 +29,7 @@ class _SplashViewState extends ConsumerState<SplashView> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             const Text(
-              'FundNepal',
+              'BeSushi Pokebowl',
               style: TextStyle(
                 fontSize: 30,
                 fontWeight: FontWeight.bold,
@@ -40,7 +40,7 @@ class _SplashViewState extends ConsumerState<SplashView> {
               mainAxisAlignment: MainAxisAlignment.center,
 
               children: [
-                Image.asset('assets/images/fund_nepal_logo.png',
+                Image.asset('assets/images/logo.png',
                   // put width and height based on screen size
                   width: screenWidth * 0.8 ,
                   height: screenHeight * 0.3,
