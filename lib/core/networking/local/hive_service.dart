@@ -1,8 +1,10 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+
 import 'package:hive_flutter/adapters.dart';
 import 'package:path_provider/path_provider.dart';
+
 import '../../../app/constants/hive_table_constant.dart';
-import '../../../feature/auth/data/model/auth_hive_model.dart';
+import '../../../features/auth/data/model/auth_hive_model.dart';
 
 final hiveServiceProvider = Provider((ref) => HiveService());
 
@@ -14,21 +16,18 @@ class HiveService{
     Hive.registerAdapter(AuthHiveModelAdapter());// this is adapter created on the .g.dart file
   }
 
-
   Future<void> addUser(AuthHiveModel user) async {
     var box = await Hive.openBox<AuthHiveModel>(HiveTableConstant.userBox);
     await box.put(user.userId, user);
   }
 
-
   //Login
-  Future<AuthHiveModel?> login(String username, String password) async {
+  Future<AuthHiveModel?> login(String email, String password) async {
     var box = await Hive.openBox<AuthHiveModel>(HiveTableConstant.userBox);
     var user = box.values.firstWhere((element) =>
-    element.username == username && element.password == password);
+    element.email == email && element.password == password);
     box.close();
     return user;
   }
-
 
 }

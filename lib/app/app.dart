@@ -1,22 +1,19 @@
-import 'package:finalproject/app/themes/app_theme.dart';
-import 'package:finalproject/feature/splash/presentation/view/splash_view.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 
+import '../features/splash/presentation/view/splash_view.dart';
 import 'navigator_key/navigator_key.dart';
 
-class App extends ConsumerWidget {
+class App extends StatelessWidget {
   const App({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  Widget build(BuildContext context) {
     return MaterialApp(
       navigatorKey: AppNavigator.navigatorKey,
+      home:  const SplashView(),
       debugShowCheckedModeBanner: false,
-      title: 'Student Management',
-      theme: AppTheme.getApplicationTheme(false),
-      home: const SplashView(),
+      title: 'Fund Nepal',
     );
   }
 }

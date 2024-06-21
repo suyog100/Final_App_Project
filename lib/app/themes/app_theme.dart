@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+
 import '../constants/theme_constant.dart';
 
 class AppTheme {
@@ -10,11 +11,11 @@ class AppTheme {
       // change the theme according to the user preference
       colorScheme: isDark
           ? const ColorScheme.dark(
-        primary: ThemeConstant.darkPrimaryColor,
-      )
+              primary: ThemeConstant.darkPrimaryColor,
+            )
           : const ColorScheme.light(
-        primary: Color.fromARGB(255, 17, 119, 20),
-      ),
+              primary: Color.fromARGB(255, 17, 119, 20),
+            ),
       brightness: isDark ? Brightness.dark : Brightness.light,
       fontFamily: 'Montserrat',
       useMaterial3: true,

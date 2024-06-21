@@ -1,7 +1,10 @@
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 
-class AppNavigator{
+class AppNavigator {
   AppNavigator._();
 
   static final navigatorKey = GlobalKey<NavigatorState>();
 }
+
+
+
