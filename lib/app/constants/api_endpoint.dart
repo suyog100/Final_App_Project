@@ -14,4 +14,11 @@ class ApiEndpoints {
   static const String uploadImage = "user/uploadImage";
   static const String currentUser = "user/getMe";
 
+  //product routes
+  static const String products = "${baseUrl}products";
+  //fetching the data for pagination form the backend
+  static const String productPagination = "${products}/pagination";
+  //for the pagination providing the limit page for the api end point
+  static const limitPage = 20;
+
 }

@@ -7,7 +7,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../../app/constants/api_endpoint.dart';
 import '../../../../../core/failure/failure.dart';
 import '../../../../../core/networking/remote/http_service.dart';
-import '../../../../../core/shared_prefs/user_shared_prefs.dart';
+import '../../../../splash/shared_prefs/user_shared_prefs.dart';
 import '../../../domain/entity/auth_entity.dart';
 import '../../dto/get_current_user_dto.dart';
 
