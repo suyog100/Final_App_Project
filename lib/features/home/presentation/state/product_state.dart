@@ -1,4 +1,6 @@
-import 'package:haatbazar/features/home/domain/entity/paginated_products.dart';
+
+
+import '../../domain/entity/paginated_products.dart';
 
 class ProductState {
   final List<Product> products;

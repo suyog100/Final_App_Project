@@ -1,10 +1,11 @@
 import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:haatbazar/app/constants/api_endpoint.dart';
-import 'package:haatbazar/features/home/data/dto/product_dto.dart';
-import 'package:haatbazar/features/home/data/model/product_model.dart';
-import 'package:haatbazar/features/home/domain/entity/paginated_products.dart';
+
+import '../../../../app/constants/api_endpoint.dart';
+import '../../domain/entity/paginated_products.dart';
+import '../dto/product_dto.dart';
+
 
 class ProductDataSource {
   final Dio _dio;
