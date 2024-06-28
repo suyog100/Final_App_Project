@@ -1,41 +1,36 @@
+import 'package:finalproject/features/home/data/model/product_model.dart';
 
 
-import '../../domain/entity/paginated_products.dart';
 
-class ProductState {
-  final List<Product> products;
+class ProductState{
+  final List<ProductModel> productListings;
   final bool isLoading;
-  final bool hasReachedMax;
+  final bool hasMaxReached;
   final int page;
 
   const ProductState({
-    required this.products,
+    required this.productListings,
     required this.isLoading,
-    required this.hasReachedMax,
+    required this.hasMaxReached,
     required this.page,
   });
-
-  factory ProductState.initial() {
+  factory ProductState.inital(){
     return const ProductState(
-      //fetching the product state to maintain the data flow
-      products: [],
-      isLoading: false,
-      hasReachedMax: false,
-      page: 0, // Assuming the first page starts with 0
-    );
+        productListings: [],
+        isLoading: false,
+        hasMaxReached: false,
+        page: 0);
   }
-//using copywith function
-
   ProductState copyWith({
-    List<Product>? products,
+    List<ProductModel>? productListings,
     bool? isLoading,
-    bool? hasReachedMax,
+    bool? hasMaxReached,
     int? page,
-  }) {
+  }){
     return ProductState(
-      products: products ?? this.products,
+      productListings: productListings ?? this.productListings,
       isLoading: isLoading ?? this.isLoading,
-      hasReachedMax: hasReachedMax ?? this.hasReachedMax,
+      hasMaxReached: hasMaxReached ?? this.hasMaxReached,
       page: page ?? this.page,
     );
   }
