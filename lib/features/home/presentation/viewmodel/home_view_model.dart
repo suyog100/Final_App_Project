@@ -22,6 +22,11 @@ class ProductViewModel extends StateNotifier<ProductState>{
     getProduct();
   }
 
+  // Future resetState() async{
+  //   state = ProductState.inital();
+  //   getProduct();
+  // }
+
   Future getProduct() async{
     state = state.copyWith(isLoading: true);
     final currentState = state;
