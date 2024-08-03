@@ -20,6 +20,6 @@ class ApiEndpoints {
   //fetching the data for pagination form the backend
   static const String productPagination = "${products}/pagination";
   //for the pagination providing the limit page for the api end point
-  static const limitPage = 5;
+  static const limitPage = 2;
 
 }

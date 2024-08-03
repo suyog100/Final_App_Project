@@ -1,4 +1,7 @@
+import 'package:finalproject/features/auth/presentation/view/login_view.dart';
+import 'package:finalproject/features/cart/presentation/view/cart_view.dart';
 import 'package:finalproject/features/home/presentation/view/dashboard_view.dart';
+import 'package:finalproject/features/home/presentation/view/dashborad_test.dart';
 import 'package:finalproject/features/home/presentation/view/home_view.dart';
 import 'package:finalproject/features/splash/screeen/internet_checker_view.dart';
 import 'package:flutter/material.dart';
@@ -14,7 +17,7 @@ class App extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       navigatorKey: AppNavigator.navigatorKey,
-      home:  const HomeView(),
+      home:  const DashboardTest(),
       debugShowCheckedModeBanner: false,
       title: 'BeSushi Pokebowl',
     );

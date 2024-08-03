@@ -1,15 +1,84 @@
+import 'dart:async';
+
+import 'package:all_sensors2/all_sensors2.dart';
 import 'package:finalproject/app/app.dart';
+import 'package:finalproject/features/home/presentation/widget/product_cart.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
 
-class DashboardView extends StatelessWidget {
+import '../../../../core/common/dialog.dart';
+import '../../../../core/common/my_snackbar.dart';
+import '../../domain/entity/paginated_products.dart';
+
+class DashboardView extends StatefulWidget {
   const DashboardView({super.key});
 
   @override
+  State<DashboardView> createState() => _DashboardViewState();
+}
+
+class _DashboardViewState extends State<DashboardView> {
+
+  bool showYesNoDialog = true;
+  bool isDialogShowing = false;
+
+  final key = GlobalKey<FormState>();
+
+  List<double> _gyroscopeValues = [];
+  final List<StreamSubscription<dynamic>> _streamSubscription = [];
+
+  @override
+  void initState() {
+    _streamSubscription.add(gyroscopeEvents!.listen((GyroscopeEvent event) {
+      setState(() {
+        _gyroscopeValues = <double>[event.x, event.y, event.z];
+
+        _checkGyroscopeValues(_gyroscopeValues);
+      });
+    }));
+
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    for (final subscription in _streamSubscription) {
+      subscription.cancel();
+    }
+    super.dispose();
+  }
+
+  void _checkGyroscopeValues(List<double> values) async {
+    const double threshold = 5; // Example threshold value, adjust as needed
+    if (values.any((value) => value.abs() > threshold)) {
+      if (showYesNoDialog && !isDialogShowing) {
+        isDialogShowing = true;
+        final result = await myYesNoDialog(
+          title: 'Are you sure you want to send feedback?',
+        );
+        isDialogShowing = false;
+        if (result) {
+          showMySnackBar(
+            message: 'Feedback sent',
+            color: Colors.green,
+          );
+        }
+      }
+    }
+  }
+  @override
   Widget build(BuildContext context) {
+
+
+    ProductEntity productOne = ProductEntity(
+        id: "123", productName: "chowmein",
+        productPrice: 58, productCategory: "nepali dish",
+        productDescription: "filled with plate",
+        productImage: "https://media.istockphoto.com/id/1195969549/photo/nepali-chinese-chowmein.jpg?b=1&s=612x612&w=0&k=20&c=qvroyjT3TV0RlxnI--NWwJrE8SCrei3gDc_44QaPzmA=");
+
     // return  Scaffold(
     //   backgroundColor: Colors.white,
     //   body: SafeArea(
@@ -125,31 +194,15 @@ class DashboardView extends StatelessWidget {
                 ],
               ),
             ),
-            PartnerCard(
-              image: 'assets/images/subway.png',
-              name: 'Subway',
-              distance: '1.8km',
-              deliveryTime: 'Free shipping',
-              rating: 4.5,
-            ),
-            PartnerCard(
-              image: 'assets/images/tacobell.png',
-              name: 'Taco Bell',
-              distance: '0.2km',
-              deliveryTime: 'Free shipping',
-              rating: 4.2,
-            ),
+           ProductCart(product: productOne),
+
+
+
             Padding(
               padding: const EdgeInsets.all(16.0),
               child: Text('Nearby', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
             ),
-            PartnerCard(
-              image: 'assets/images/burger_king.png',
-              name: 'Burger King',
-              distance: '2.6km',
-              deliveryTime: 'Free shipping',
-              rating: 4.8,
-            ),
+
             PartnerCard(
               image: 'assets/images/kfc.png',
               name: 'KFC',
