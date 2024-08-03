@@ -1,3 +1,6 @@
+import 'package:finalproject/features/home/presentation/view/dashboard_view.dart';
+import 'package:finalproject/features/home/presentation/view/home_view.dart';
+import 'package:finalproject/features/splash/screeen/internet_checker_view.dart';
 import 'package:flutter/material.dart';
 
 
@@ -11,9 +14,9 @@ class App extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       navigatorKey: AppNavigator.navigatorKey,
-      home:  const SplashView(),
+      home:  const HomeView(),
       debugShowCheckedModeBanner: false,
-      title: 'Fund Nepal',
+      title: 'BeSushi Pokebowl',
     );
   }
 }
