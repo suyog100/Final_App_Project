@@ -6,17 +6,25 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../app/constants/api_endpoint.dart';
 import '../../../../core/failure/failure.dart';
 import '../../../../core/networking/remote/http_service.dart';
+import '../../domain/entity/paginated_products.dart';
+import '../dto/product_dto.dart';
 import '../model/product_model.dart';
 
-final productDataSourceProvider = Provider.autoDispose(
-        (ref) => ProductDataSource(ref.read(httpServiceProvider)));
 
+final productDataSourceProvider = Provider<ProductDataSource>((ref) {
+  final dio = ref.read(httpServiceProvider);
+  return ProductDataSource(
+    dio: dio,
+    productModel: ref.read(productModelProvider),
+  );
+});
 class ProductDataSource {
-  final Dio _dio;
-  ProductDataSource(this._dio);
-  Future<Either<Failure, List<ProductModel>>> getProduct(int page) async {
+  final Dio dio;
+  final ProductModel productModel;
+  ProductDataSource({required this.dio, required this.productModel});
+  Future<Either<Failure, List<ProductEntity>>> getProduct(int page) async {
     try {
-      final response = await _dio.get(
+      final response = await dio.get(
         ApiEndpoints.products,
         queryParameters: {
           '_page': page,
@@ -24,11 +32,9 @@ class ProductDataSource {
         },
       );
 
-      return Right(
-          (response.data['products'] as List)
-               .map((batch) => ProductModel.fromJson(batch))
-             .toList(),
-      );
+
+      ProductDto getAllProductDto = ProductDto.fromJson(response.data);
+      return Right(productModel.toEntityList(getAllProductDto.data));
     } on DioException catch (e) {
 
       return Left(

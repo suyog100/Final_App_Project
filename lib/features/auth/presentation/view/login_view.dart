@@ -1,10 +1,12 @@
 
 import 'package:finalproject/features/auth/presentation/view/register_view.dart';
+import 'package:finalproject/features/home/presentation/view/dashboard_view.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../../core/common/biometric_auth.dart';
 import '../viewmodel/auth_view_model.dart';
 
 
@@ -325,6 +327,35 @@ class _LoginViewState extends ConsumerState<LoginView> {
                             ),
                           ],
                         ),
+                        ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            padding: EdgeInsets.symmetric(horizontal: 20, vertical: 15),
+                          ),
+                          onPressed: () async {
+                            final authenticate =
+                            await BiometricAuth.authenticateWithBiometrics();
+                            if (authenticate) {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => const DashboardView(),
+                                ),
+                              );
+                            }
+                          },
+
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Icon(
+                                Icons.fingerprint,
+                                color: Colors.white,
+                              ),
+                              SizedBox(width: 10),
+                              Text('Authenticate'),
+                            ],
+                          ),
+                        )
                       ],
                     ),
                   ),

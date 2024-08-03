@@ -1,9 +1,11 @@
 import 'package:finalproject/features/home/data/model/product_model.dart';
 
+import '../../domain/entity/paginated_products.dart';
+
 
 
 class ProductState{
-  final List<ProductModel> productListings;
+  final List<ProductEntity> productListings;
   final bool isLoading;
   final bool hasMaxReached;
   final int page;
@@ -14,7 +16,7 @@ class ProductState{
     required this.hasMaxReached,
     required this.page,
   });
-  factory ProductState.inital(){
+  factory ProductState.initial(){
     return const ProductState(
         productListings: [],
         isLoading: false,
@@ -22,7 +24,7 @@ class ProductState{
         page: 0);
   }
   ProductState copyWith({
-    List<ProductModel>? productListings,
+    List<ProductEntity>? productListings,
     bool? isLoading,
     bool? hasMaxReached,
     int? page,

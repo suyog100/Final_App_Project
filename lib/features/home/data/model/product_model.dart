@@ -1,14 +1,18 @@
 import 'package:equatable/equatable.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 import '../../domain/entity/paginated_products.dart';
 
 part 'product_model.g.dart';
 
+final productModelProvider = Provider<ProductModel>((ref) {
+  return ProductModel.empty();
+});
+
 @JsonSerializable()
 class ProductModel extends Equatable {
   final String id;
-
   final String productName;
   final double productPrice;
   final String productCategory;
@@ -18,7 +22,6 @@ class ProductModel extends Equatable {
 
   const ProductModel({
     required this.id,
-
     required this.productName,
     required this.productPrice,
     required this.productCategory,
@@ -27,25 +30,29 @@ class ProductModel extends Equatable {
 
   });
 
-  factory ProductModel.fromJson(Map<String, dynamic> json) {
-    return ProductModel(
-      id: json['id'] as String? ?? '',
 
-      productName: json['productName'] as String? ?? '',
-      productPrice: (json['productPrice'] as num?)?.toDouble() ?? 0.0,
-      productCategory: json['productCategory'] as String? ?? '',
-      productDescription: json['productDescription'] as String? ?? '',
-      productImage: json['productImage'] as String? ?? '',
-
+  factory ProductModel.empty() {
+    return const ProductModel(
+      id: '',
+      productName: '',
+      productDescription: '',
+      productImage: '',
+      productPrice: 0,
+      productCategory: '',
     );
   }
 
+  factory ProductModel.fromJson(Map<String, dynamic> json) =>
+      _$ProductModelFromJson(json);
+  // to entity list
+  List<ProductEntity> toEntityList(List<ProductModel> models) =>
+      models.map((model) => model.toEntity()).toList();
+
   Map<String, dynamic> toJson() => _$ProductModelToJson(this);
 
-  Product toEntity() {
-    return Product(
+  ProductEntity toEntity() {
+    return ProductEntity(
       id: id,
-
       productName: productName,
       productPrice: productPrice,
       productCategory: productCategory,
