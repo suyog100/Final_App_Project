@@ -1,4 +1,6 @@
 import 'package:finalproject/features/cart/presentation/view/cart_view.dart';
+import 'package:finalproject/features/menu/presentation/view/Menu.dart';
+
 import 'package:flutter/material.dart';
 
 class DashboardTest extends StatefulWidget {
@@ -13,8 +15,8 @@ class _DashboardTestState extends State<DashboardTest> {
 
   static const List<Widget> _widgetOptions = <Widget>[
     DeliveryScreen(),
-    Text('Menu'),
     CartView(),
+    MenuPage(),
     Text('Profile'),
   ];
 
@@ -23,7 +25,13 @@ class _DashboardTestState extends State<DashboardTest> {
       Navigator.of(context).push(MaterialPageRoute(
         builder: (context) => CartView(),
       ));
-    } else {
+    }
+    if (index == 1) {  // Index 1 corresponds to the Cart icon
+      Navigator.of(context).push(MaterialPageRoute(
+        builder: (context) => MenuPage(),
+      ));
+    }
+    else {
       setState(() {
         _selectedIndex = index;
       });
