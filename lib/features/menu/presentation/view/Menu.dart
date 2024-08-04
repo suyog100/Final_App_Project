@@ -56,31 +56,62 @@ class SearchBar extends StatelessWidget {
 }
 
 class CategoryList extends StatelessWidget {
-  final List<String> categories = ['Food', 'Fruits', 'Drinks'];
+  final List<Map<String, String>> categories = [
+    {'icon': '🍔', 'label': 'Food'},
+    {'icon': '🍓', 'label': 'Fruits'},
+    {'icon': '🍹', 'label': 'Drinks'},
+    {'icon': '🍰', 'label': 'Desserts'},
+    // Add more categories as needed
+  ];
 
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      scrollDirection: Axis.horizontal,
-      child: Row(
-        children: categories.map((category) => CategoryChip(label: category)).toList(),
+    return Container(
+      height: 50, // Adjust this height as needed
+      child: ListView.builder(
+        scrollDirection: Axis.horizontal,
+        itemCount: categories.length,
+        itemBuilder: (context, index) {
+          return CategoryChip(
+            icon: categories[index]['icon']!,
+            label: categories[index]['label']!,
+          );
+        },
       ),
     );
   }
 }
 
 class CategoryChip extends StatelessWidget {
+  final String icon;
   final String label;
 
-  CategoryChip({required this.label});
+  CategoryChip({required this.icon, required this.label});
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: EdgeInsets.symmetric(horizontal: 8.0),
-      child: Chip(
-        label: Text(label),
-        backgroundColor: Colors.grey[200],
+    return Container(
+      margin: EdgeInsets.symmetric(horizontal: 8.0),
+      padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(20),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.grey.withOpacity(0.2),
+            spreadRadius: 1,
+            blurRadius: 3,
+            offset: Offset(0, 1),
+          ),
+        ],
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Text(icon, style: TextStyle(fontSize: 20)),
+          SizedBox(width: 8),
+          Text(label, style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500)),
+        ],
       ),
     );
   }
