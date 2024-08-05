@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:finalproject/features/cart/presentation/view/cart_view.dart';
-
 import '../../../home/presentation/view/dashborad_test.dart';
-
 
 class MenuPage extends StatefulWidget {
   const MenuPage({super.key});
@@ -218,17 +216,69 @@ class SortDropdown extends StatelessWidget {
 }
 
 class FoodGrid extends StatelessWidget {
+  final List<Map<String, dynamic>> foodItems = [
+    {
+      'imagePath': 'assets/images/sushi.png',
+      'title': 'Sushi Platter',
+      'price': 15.99,
+      'description': 'Assorted fresh sushi',
+    },
+    {
+      'imagePath': 'assets/images/burger.png',
+      'title': 'Classic Burger',
+      'price': 9.99,
+      'description': 'Juicy beef patty with fresh veggies',
+    },
+    {
+      'imagePath': 'assets/images/pizza.png',
+      'title': 'Pepperoni Pizza',
+      'price': 12.50,
+      'description': 'Crispy crust with pepperoni and cheese',
+    },
+    {
+      'imagePath': 'assets/images/salad.png',
+      'title': 'Greek Salad',
+      'price': 7.25,
+      'description': 'Fresh vegetables with feta cheese',
+    },
+    {
+      'imagePath': 'assets/images/pasta.png',
+      'title': 'Spaghetti Carbonara',
+      'price': 11.75,
+      'description': 'Creamy pasta with bacon and parmesan',
+    },
+    {
+      'imagePath': 'assets/images/steak.png',
+      'title': 'Grilled Steak',
+      'price': 18.99,
+      'description': 'Tender steak with herb butter',
+    },
+  ];
+
   @override
   Widget build(BuildContext context) {
-    return ListView.builder(
-      shrinkWrap: true,
-      physics: NeverScrollableScrollPhysics(),
-      itemCount: 2, // Adjust this number as needed
-      itemBuilder: (context, index) {
-        return FoodItem(
-          imagePath: 'assets/images/sushi.png', // Update this path
-          title: 'Pakistan Food',
-          price: 8.50,
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final crossAxisCount = constraints.maxWidth > 600 ? 2 : 1;
+        return GridView.builder(
+          shrinkWrap: true,
+          physics: NeverScrollableScrollPhysics(),
+          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: crossAxisCount,
+            childAspectRatio: 3,
+            crossAxisSpacing: 10,
+            mainAxisSpacing: 10,
+          ),
+          itemCount: foodItems.length,
+          itemBuilder: (context, index) {
+            final item = foodItems[index];
+            return FoodItem(
+              imagePath: item['imagePath'],
+              title: item['title'],
+              price: item['price'],
+              description: item['description'],
+            );
+          },
         );
       },
     );
@@ -239,81 +289,46 @@ class FoodItem extends StatelessWidget {
   final String imagePath;
   final String title;
   final double price;
+  final String description;
 
   FoodItem({
     required this.imagePath,
     required this.title,
     required this.price,
+    required this.description,
   });
+
   @override
   Widget build(BuildContext context) {
-    return Container(
-      margin: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(12),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.grey.withOpacity(0.2),
-            spreadRadius: 1,
-            blurRadius: 3,
-            offset: Offset(0, 1),
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final isTablet = constraints.maxWidth > 600;
+        final crossAxisCount = isTablet ? 2 : 1;
+        final childAspectRatio = isTablet ? 4 : 3; // Increased aspect ratio for tablets
+
+        return GridView.builder(
+          shrinkWrap: true,
+          physics: NeverScrollableScrollPhysics(),
+          padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: crossAxisCount,
+            childAspectRatio: childAspectRatio,
+            crossAxisSpacing: 16,
+            mainAxisSpacing: 16,
           ),
-        ],
-      ),
-      child: Row(
-        children: [
-          ClipRRect(
-            borderRadius: BorderRadius.only(
-              topLeft: Radius.circular(12),
-              bottomLeft: Radius.circular(12),
-            ),
-            child: Image.asset(
-              imagePath,
-              width: 80,
-              height: 80,
-              fit: BoxFit.cover,
-            ),
-          ),
-          Expanded(
-            child: Padding(
-              padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Text(
-                    title,
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
-                    ),
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                  SizedBox(height: 4),
-                  Text(
-                    '\$${price.toStringAsFixed(2)}',
-                    style: TextStyle(
-                      fontSize: 14,
-                      color: Colors.grey[600],
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
-          Padding(
-            padding: EdgeInsets.all(8),
-            child: IconButton(
-              icon: Icon(Icons.add_circle, color: Colors.orange, size: 32),
-              onPressed: () {
-                // Add to cart functionality
-              },
-            ),
-          ),
-        ],
-      ),
+          itemCount: foodItems.length,
+          itemBuilder: (context, index) {
+            final item = foodItems[index];
+            return FoodItem(
+              imagePath: item['imagePath'],
+              title: item['title'],
+              price: item['price'],
+              description: item['description'],
+              isTablet: isTablet,
+            );
+          },
+        );
+      },
     );
   }
 }
