@@ -248,7 +248,7 @@ class FoodGrid extends StatelessWidget {
       'description': 'Creamy pasta with bacon and parmesan',
     },
     {
-      'imagePath': 'assets/images/steak.png',
+      'imagePath': 'assets/images/momo.png',
       'title': 'Grilled Steak',
       'price': 18.99,
       'description': 'Tender steak with herb butter',
@@ -260,14 +260,17 @@ class FoodGrid extends StatelessWidget {
     return LayoutBuilder(
       builder: (context, constraints) {
         final crossAxisCount = constraints.maxWidth > 600 ? 2 : 1;
+        final childAspectRatio = constraints.maxWidth > 600 ? 4.0 : 3.0;
+
         return GridView.builder(
           shrinkWrap: true,
           physics: NeverScrollableScrollPhysics(),
+          padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
           gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
             crossAxisCount: crossAxisCount,
-            childAspectRatio: 3,
-            crossAxisSpacing: 10,
-            mainAxisSpacing: 10,
+            childAspectRatio: childAspectRatio,
+            crossAxisSpacing: 16,
+            mainAxisSpacing: 16,
           ),
           itemCount: foodItems.length,
           itemBuilder: (context, index) {
@@ -300,35 +303,47 @@ class FoodItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return LayoutBuilder(
-      builder: (context, constraints) {
-        final isTablet = constraints.maxWidth > 600;
-        final crossAxisCount = isTablet ? 2 : 1;
-        final childAspectRatio = isTablet ? 4 : 3; // Increased aspect ratio for tablets
-
-        return GridView.builder(
-          shrinkWrap: true,
-          physics: NeverScrollableScrollPhysics(),
-          padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: crossAxisCount,
-            childAspectRatio: childAspectRatio,
-            crossAxisSpacing: 16,
-            mainAxisSpacing: 16,
-          ),
-          itemCount: foodItems.length,
-          itemBuilder: (context, index) {
-            final item = foodItems[index];
-            return FoodItem(
-              imagePath: item['imagePath'],
-              title: item['title'],
-              price: item['price'],
-              description: item['description'],
-              isTablet: isTablet,
-            );
-          },
-        );
-      },
+    return Card(
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Image.asset(imagePath, width: 80, height: 80, fit: BoxFit.cover),
+            SizedBox(width: 10),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(title, style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
+                  SizedBox(height: 4),
+                  Text(description, style: TextStyle(fontSize: 12, color: Colors.grey[600])),
+                  SizedBox(height: 4),
+                  Text('\$${price.toStringAsFixed(2)}',
+                      style: TextStyle(fontWeight: FontWeight.bold, color: Colors.green)),
+                ],
+              ),
+            ),
+            Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                ElevatedButton(
+                  onPressed: () {
+                    // Add to cart functionality here
+                    print('Added $title to cart');
+                  },
+                  child: Text('Add'),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.orange,
+                    padding: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
     );
   }
+
 }
