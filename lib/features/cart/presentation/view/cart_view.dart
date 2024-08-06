@@ -1,13 +1,40 @@
 import 'package:flutter/material.dart';
+import 'package:finalproject/features/home/presentation/view/dashborad_test.dart';
+
+
+import '../../../menu/presentation/view/Menu.dart';
 
 class CartView extends StatefulWidget {
   const CartView({super.key});
 
   @override
-  State<CartView> createState() => _CartViewState();
+  _CartViewState createState() => _CartViewState();
 }
 
 class _CartViewState extends State<CartView> {
+  int _selectedIndex = 2; // Start with Cart selected
+
+  void _onItemTapped(int index) {
+    if (index != _selectedIndex) {
+      if (index == 0) {
+        Navigator.of(context).pushReplacement(MaterialPageRoute(
+          builder: (context) => DashboardTest(),
+        ));
+      } else if (index == 1) {
+        Navigator.of(context).pushReplacement(MaterialPageRoute(
+          builder: (context) => MenuPage(),
+        ));
+      } else if (index == 3) {
+        // Navigate to Profile page
+        // Add your Profile page navigation here
+      } else {
+        setState(() {
+          _selectedIndex = index;
+        });
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -176,28 +203,52 @@ class _CartViewState extends State<CartView> {
                       ),
                     ),
                   ],
-
                 ),
               ),
             ),
           ),
-            Padding(
+          Padding(
             padding: const EdgeInsets.all(16.0),
-    child: ElevatedButton(
-    onPressed: () {
-    // Add your submit logic here
-    },
-    child: Text('Submit'),
-    style: ElevatedButton.styleFrom(
-    backgroundColor: Colors.orange,
-    minimumSize: Size(double.infinity, 50), // full width and 50 height
-    shape: RoundedRectangleBorder(
-    borderRadius: BorderRadius.circular(25),
-    ),
-    ),
-    ),
+            child: ElevatedButton(
+              onPressed: () {
+                // Add your submit logic here
+              },
+              child: Text('Submit'),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.orange,
+                minimumSize: Size(double.infinity, 50), // full width and 50 height
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(25),
+                ),
+              ),
             ),
+          ),
         ],
+      ),
+      bottomNavigationBar: BottomNavigationBar(
+        items: const <BottomNavigationBarItem>[
+          BottomNavigationBarItem(
+            icon: Icon(Icons.home),
+            label: 'Home',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.menu),
+            label: 'Menu',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.shopping_cart),
+            label: 'Cart',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.person),
+            label: 'Profile',
+          ),
+        ],
+        currentIndex: _selectedIndex,
+        selectedItemColor: Colors.orange,
+        unselectedItemColor: Colors.grey,
+        onTap: _onItemTapped,
+        type: BottomNavigationBarType.fixed,
       ),
     );
   }
