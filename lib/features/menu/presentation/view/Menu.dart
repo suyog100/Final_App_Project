@@ -236,7 +236,7 @@ class FoodGrid extends StatelessWidget {
       'description': 'Crispy crust with pepperoni and cheese',
     },
     {
-      'imagePath': 'assets/images/salad.png',
+      'imagePath': 'assets/images/tacos.png',
       'title': 'Greek Salad',
       'price': 7.25,
       'description': 'Fresh vegetables with feta cheese',
@@ -260,7 +260,7 @@ class FoodGrid extends StatelessWidget {
     return LayoutBuilder(
       builder: (context, constraints) {
         final crossAxisCount = constraints.maxWidth > 600 ? 2 : 1;
-        final childAspectRatio = constraints.maxWidth > 600 ? 4.0 : 3.0;
+        final childAspectRatio = constraints.maxWidth > 600 ? 4.5 : 3.0;
 
         return GridView.builder(
           shrinkWrap: true,
@@ -270,7 +270,7 @@ class FoodGrid extends StatelessWidget {
             crossAxisCount: crossAxisCount,
             childAspectRatio: childAspectRatio,
             crossAxisSpacing: 16,
-            mainAxisSpacing: 16,
+            mainAxisSpacing: 8,
           ),
           itemCount: foodItems.length,
           itemBuilder: (context, index) {
@@ -286,6 +286,7 @@ class FoodGrid extends StatelessWidget {
       },
     );
   }
+
 }
 
 class FoodItem extends StatelessWidget {
@@ -304,41 +305,42 @@ class FoodItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
+      margin: EdgeInsets.symmetric(vertical: 8, horizontal: 4),
       child: Padding(
         padding: const EdgeInsets.all(8.0),
         child: Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Image.asset(imagePath, width: 80, height: 80, fit: BoxFit.cover),
+            Image.asset(imagePath, width: 70, height: 70, fit: BoxFit.cover),
             SizedBox(width: 10),
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisSize: MainAxisSize.min,
                 children: [
-                  Text(title, style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
-                  SizedBox(height: 4),
-                  Text(description, style: TextStyle(fontSize: 12, color: Colors.grey[600])),
-                  SizedBox(height: 4),
+                  Text(title, style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14)),
+                  SizedBox(height: 2),
+                  Text(description,
+                      style: TextStyle(fontSize: 12, color: Colors.grey[600]),
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis),
+                  SizedBox(height: 2),
                   Text('\$${price.toStringAsFixed(2)}',
-                      style: TextStyle(fontWeight: FontWeight.bold, color: Colors.green)),
+                      style: TextStyle(fontWeight: FontWeight.bold, color: Colors.green, fontSize: 12)),
                 ],
               ),
             ),
-            Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                ElevatedButton(
-                  onPressed: () {
-                    // Add to cart functionality here
-                    print('Added $title to cart');
-                  },
-                  child: Text('Add'),
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.orange,
-                    padding: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
-                  ),
-                ),
-              ],
+            SizedBox(width: 10),
+            ElevatedButton(
+              onPressed: () {
+                print('Added $title to cart');
+              },
+              child: Text('Add', style: TextStyle(fontSize: 12)),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.orange,
+                padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                minimumSize: Size(60, 30),
+              ),
             ),
           ],
         ),
