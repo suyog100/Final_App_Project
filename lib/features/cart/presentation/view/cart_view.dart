@@ -12,28 +12,9 @@ class CartView extends StatefulWidget {
 }
 
 class _CartViewState extends State<CartView> {
-  int _selectedIndex = 2; // Start with Cart selected
+   // Start with Cart selected
 
-  void _onItemTapped(int index) {
-    if (index != _selectedIndex) {
-      if (index == 0) {
-        Navigator.of(context).pushReplacement(MaterialPageRoute(
-          builder: (context) => DashboardTest(),
-        ));
-      } else if (index == 1) {
-        Navigator.of(context).pushReplacement(MaterialPageRoute(
-          builder: (context) => MenuPage(),
-        ));
-      } else if (index == 3) {
-        // Navigate to Profile page
-        // Add your Profile page navigation here
-      } else {
-        setState(() {
-          _selectedIndex = index;
-        });
-      }
-    }
-  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -225,31 +206,7 @@ class _CartViewState extends State<CartView> {
           ),
         ],
       ),
-      bottomNavigationBar: BottomNavigationBar(
-        items: const <BottomNavigationBarItem>[
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            label: 'Home',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.menu),
-            label: 'Menu',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.shopping_cart),
-            label: 'Cart',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.person),
-            label: 'Profile',
-          ),
-        ],
-        currentIndex: _selectedIndex,
-        selectedItemColor: Colors.orange,
-        unselectedItemColor: Colors.grey,
-        onTap: _onItemTapped,
-        type: BottomNavigationBarType.fixed,
-      ),
+
     );
   }
 }

@@ -1,5 +1,6 @@
 import 'package:finalproject/features/cart/presentation/view/cart_view.dart';
 import 'package:finalproject/features/menu/presentation/view/Menu.dart';
+import 'package:finalproject/features/profile/presentation/view/profile.dart';
 
 import 'package:flutter/material.dart';
 
@@ -15,27 +16,16 @@ class _DashboardTestState extends State<DashboardTest> {
 
   static const List<Widget> _widgetOptions = <Widget>[
     DeliveryScreen(),
-    CartView(),
     MenuPage(),
-    Text('Profile'),
+    CartView(),
+
+    Profile(),
   ];
 
   void _onItemTapped(int index) {
-    if (index == 2) {  // Index 2 corresponds to the Cart icon
-      Navigator.of(context).push(MaterialPageRoute(
-        builder: (context) => CartView(),
-      ));
-    }
-    if (index == 1) {  // Index 1 corresponds to the Cart icon
-      Navigator.of(context).push(MaterialPageRoute(
-        builder: (context) => MenuPage(),
-      ));
-    }
-    else {
-      setState(() {
-        _selectedIndex = index;
-      });
-    }
+    setState(() {
+      _selectedIndex = index;
+    });
   }
 
   @override
