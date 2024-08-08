@@ -3,6 +3,26 @@ import 'package:finalproject/features/menu/presentation/view/Menu.dart';
 import 'package:finalproject/features/profile/presentation/view/profile.dart';
 
 import 'package:flutter/material.dart';
+import 'dart:async';
+
+import 'package:all_sensors2/all_sensors2.dart';
+import 'package:finalproject/app/app.dart';
+import 'package:finalproject/features/home/presentation/widget/product_cart.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/painting.dart';
+import 'package:flutter/rendering.dart';
+import 'package:flutter/widgets.dart';
+
+import '../../../../core/common/dialog.dart';
+import '../../../../core/common/my_snackbar.dart';
+import '../../domain/entity/paginated_products.dart';
+import 'package:finalproject/features/home/presentation/viewmodel/home_view_model.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+import '../../../../app/constants/api_endpoint.dart';
+import '../../../../core/common/product_cart.dart';
 
 class DashboardTest extends StatefulWidget {
   const DashboardTest({super.key});

@@ -1,6 +1,7 @@
 
 import 'package:finalproject/features/auth/presentation/view/register_view.dart';
 import 'package:finalproject/features/home/presentation/view/dashboard_view.dart';
+import 'package:finalproject/features/home/presentation/view/dashborad_test.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 
@@ -338,7 +339,7 @@ class _LoginViewState extends ConsumerState<LoginView> {
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                  builder: (context) => const DashboardView(),
+                                  builder: (context) => const DashboardTest(),
                                 ),
                               );
                             }

@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 class Profile extends StatelessWidget {
   const Profile({super.key});
 
+  final String? userProfileImagePath = null;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -10,61 +12,73 @@ class Profile extends StatelessWidget {
         child: Column(
           children: [
             Container(
+              height: MediaQuery.of(context).size.height * 0.4,
               padding: const EdgeInsets.all(16),
-              color: Colors.orangeAccent,
-              child: Column(
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      const Text(
-                        'My Profile',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 24,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      IconButton(
-                        icon: const Icon(Icons.settings, color: Colors.white),
-                        onPressed: () {
-                          // Handle settings button press
-                        },
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 20),
-                  const CircleAvatar(
-                    radius: 50,
-                    backgroundImage: AssetImage('assets/profile_image.jpg'),
-                  ),
-                  const SizedBox(height: 10),
-                  const Text(
-                    'Hello Manedon!',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 22,
-                      fontWeight: FontWeight.bold,
+              decoration: BoxDecoration(
+                color: Colors.orange[100],
+                borderRadius: BorderRadius.circular(20),
+              ),
+              child: Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Icon(Icons.menu, color: Colors.black54),
+                        Icon(Icons.search, color: Colors.black54),
+                      ],
                     ),
-                  ),
-                  const Text(
-                    'Normal Kid',
-                    style: TextStyle(
-                      color: Colors.white70,
-                      fontSize: 16,
+                    const SizedBox(height: 20),
+                    Container(
+                      padding: EdgeInsets.all(3),
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        border: Border.all(color: Colors.red, width: 2),
+                      ),
+                      child: CircleAvatar(
+                        radius: 40,
+                        backgroundColor: Colors.grey[300],
+                        backgroundImage: userProfileImagePath != null
+                            ? AssetImage(userProfileImagePath!)
+                            : null,
+                        child: userProfileImagePath == null
+                            ? Icon(Icons.person, size: 40, color: Colors.grey[600])
+                            : null,
+                      ),
                     ),
-                  ),
-                ],
+                    const SizedBox(height: 15),
+                    Text(
+                      'Sourav Suman',
+                      style: TextStyle(
+                        fontSize: 24,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    Text(
+                      'App Developer',
+                      style: TextStyle(
+                        color: Colors.black54,
+                        fontSize: 18,
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ),
             Expanded(
               child: ListView(
                 padding: const EdgeInsets.all(16),
                 children: [
-                  _buildInfoTile(Icons.email, 'manedon@example.com'),
-                  _buildInfoTile(Icons.phone, '9848576962'),
-                  _buildInfoTile(Icons.location_on, 'Marvel HQ, Nepal'),
-                  // Add more info tiles as needed
+                  _buildInfoTile(Icons.email, 'Email', 'james0122@gmail.com'),
+                  _buildDivider(),
+                  _buildInfoTile(Icons.phone, 'Mobile', '1234567893'),
+                  _buildDivider(),
+                  _buildInfoTile(Icons.location_on, 'Address', 'Siliguri'),
+                  _buildDivider(),
+                  _buildInfoTile(Icons.work, 'Work', 'www.facebook.com/james0122'),
+                  _buildDivider(),
+                  _buildInfoTile(Icons.facebook, 'Facebook', 'www.facebook.com/james0122'),
                 ],
               ),
             ),
@@ -74,13 +88,47 @@ class Profile extends StatelessWidget {
     );
   }
 
-  Widget _buildInfoTile(IconData icon, String text) {
-    return Card(
-      elevation: 2,
-      margin: const EdgeInsets.only(bottom: 16),
-      child: ListTile(
-        leading: Icon(icon, color: Colors.orange),
-        title: Text(text),
+  Widget _buildInfoTile(IconData icon, String title, String content) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 12.0),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Icon(icon, color: Colors.grey, size: 24),
+          SizedBox(width: 16),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  title,
+                  style: TextStyle(
+                    color: Colors.grey[600],
+                    fontSize: 14,
+                  ),
+                ),
+                SizedBox(height: 4),
+                Text(
+                  content,
+                  style: TextStyle(
+                    fontSize: 16,
+                    color: Colors.black87,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildDivider() {
+    return Padding(
+      padding: const EdgeInsets.only(left: 40, right: 16),
+      child: Divider(
+        color: Colors.grey[300],
+        thickness: 1,
       ),
     );
   }
