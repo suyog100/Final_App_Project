@@ -1,6 +1,6 @@
 import 'package:equatable/equatable.dart';
 
-class GetPostEntity extends Equatable {
+class GetProductEntity extends Equatable {
   final String productId;
   final String productName;
   final int productPrice;
@@ -8,7 +8,7 @@ class GetPostEntity extends Equatable {
   final String productCategory;
   final String productImage;
 
-  const GetPostEntity({
+  const GetProductEntity({
     required this.productId,
     required this.productName,
     required this.productPrice,

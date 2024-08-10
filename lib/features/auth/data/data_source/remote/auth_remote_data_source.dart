@@ -2,18 +2,17 @@ import 'dart:io';
 
 import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
+import 'package:finalproject/core/shared_prefs/user_shared_prefs.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../../app/constants/api_endpoint.dart';
 import '../../../../../core/failure/failure.dart';
 import '../../../../../core/networking/remote/http_service.dart';
-import '../../../../splash/shared_prefs/user_shared_prefs.dart';
 import '../../../domain/entity/auth_entity.dart';
 import '../../dto/get_current_user_dto.dart';
 
-
 final authRemoteDataSourceProvider = Provider(
-      (ref) => AuthRemoteDataSource(
+  (ref) => AuthRemoteDataSource(
     dio: ref.read(httpServiceProvider),
     userSharedPrefs: ref.read(userSharedPrefsProvider),
   ),
@@ -36,7 +35,7 @@ class AuthRemoteDataSource {
           "password": user.password,
         },
       );
-      if (response.statusCode == 201) {
+      if (response.statusCode == 200) {
         return const Right(true);
       } else {
         return Left(
@@ -58,8 +57,8 @@ class AuthRemoteDataSource {
 
   // Upload image using multipart
   Future<Either<Failure, String>> uploadProfilePicture(
-      File image,
-      ) async {
+    File image,
+  ) async {
     try {
       String fileName = image.path.split('/').last;
       FormData formData = FormData.fromMap(
@@ -88,9 +87,9 @@ class AuthRemoteDataSource {
   }
 
   Future<Either<Failure, bool>> loginUser(
-      String email,
-      String password,
-      ) async {
+    String email,
+    String password,
+  ) async {
     try {
       Response response = await dio.post(
         ApiEndpoints.login,
@@ -128,8 +127,8 @@ class AuthRemoteDataSource {
       String? token;
       var data = await userSharedPrefs.getUserToken();
       data.fold(
-            (l) => token = null,
-            (r) => token = r!,
+        (l) => token = null,
+        (r) => token = r!,
       );
 
       var response = await dio.get(
@@ -140,7 +139,8 @@ class AuthRemoteDataSource {
       );
 
       if (response.statusCode == 200) {
-        GetCurrentUserDto getCurrentUserDto = GetCurrentUserDto.fromJson(response.data);
+        GetCurrentUserDto getCurrentUserDto =
+            GetCurrentUserDto.fromJson(response.data);
 
         return Right(getCurrentUserDto.toEntity());
       } else {

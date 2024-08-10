@@ -38,7 +38,6 @@ class _DashboardTestState extends State<DashboardTest> {
     DeliveryScreen(),
     MenuPage(),
     CartView(),
-
     Profile(),
   ];
 
@@ -119,7 +118,8 @@ class DeliveryScreen extends StatelessWidget {
                     children: [
                       // Search bar
                       Container(
-                        padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+                        padding: EdgeInsets.symmetric(
+                            horizontal: 16.0, vertical: 8.0),
                         decoration: BoxDecoration(
                           color: Colors.grey[100],
                           borderRadius: BorderRadius.circular(8.0),
@@ -130,7 +130,8 @@ class DeliveryScreen extends StatelessWidget {
                             SizedBox(width: 5.0),
                             Text(
                               'Search on app',
-                              style: TextStyle(color: Colors.grey, fontSize: 16),
+                              style:
+                                  TextStyle(color: Colors.grey, fontSize: 16),
                             ),
                           ],
                         ),
@@ -149,15 +150,19 @@ class DeliveryScreen extends StatelessWidget {
                                 children: [
                                   Text(
                                     'Delivery to',
-                                    style: TextStyle(color: Colors.orange, fontSize: 14),
+                                    style: TextStyle(
+                                        color: Colors.orange, fontSize: 14),
                                   ),
                                   Row(
                                     children: [
                                       Text(
                                         'Dillibazar Road',
-                                        style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                                        style: TextStyle(
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.bold),
                                       ),
-                                      Icon(Icons.keyboard_arrow_down, color: Colors.orange),
+                                      Icon(Icons.keyboard_arrow_down,
+                                          color: Colors.orange),
                                     ],
                                   ),
                                 ],
@@ -165,18 +170,21 @@ class DeliveryScreen extends StatelessWidget {
                             ],
                           ),
                           Container(
-                            padding: EdgeInsets.symmetric(horizontal: 12.0, vertical: 6.0),
+                            padding: EdgeInsets.symmetric(
+                                horizontal: 12.0, vertical: 6.0),
                             decoration: BoxDecoration(
                               color: Colors.grey[200],
                               borderRadius: BorderRadius.circular(25.0),
                             ),
                             child: Row(
                               children: [
-                                Icon(Icons.tune, size: 18, color: Colors.grey[600]),
+                                Icon(Icons.tune,
+                                    size: 18, color: Colors.grey[600]),
                                 SizedBox(width: 4.0),
                                 Text(
                                   'Filter',
-                                  style: TextStyle(color: Colors.grey[600], fontSize: 14),
+                                  style: TextStyle(
+                                      color: Colors.grey[600], fontSize: 14),
                                 ),
                               ],
                             ),
@@ -189,7 +197,6 @@ class DeliveryScreen extends StatelessWidget {
               ],
             ),
           ),
-
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16.0),
             child: Column(
@@ -206,9 +213,7 @@ class DeliveryScreen extends StatelessWidget {
       ),
     );
   }
-  }
-
-
+}
 
 class CategorySection extends StatelessWidget {
   @override
@@ -254,19 +259,22 @@ class CategorySection extends StatelessWidget {
             children: [
               Expanded(
                 child: CategoryItem(
-                  imagePath: 'assets/images/sandwich.png', // Adjust the path to your image
+                  imagePath:
+                      'assets/images/sandwich.png', // Adjust the path to your image
                   text: 'Sandwich',
                 ),
               ),
               Expanded(
                 child: CategoryItem(
-                  imagePath: 'assets/images/pizza.png', // Adjust the path to your image
+                  imagePath:
+                      'assets/images/pizza.png', // Adjust the path to your image
                   text: 'Pizza',
                 ),
               ),
               Expanded(
                 child: CategoryItem(
-                  imagePath: 'assets/images/burger.png', // Adjust the path to your image
+                  imagePath:
+                      'assets/images/burger.png', // Adjust the path to your image
                   text: 'Burgers',
                 ),
               ),
@@ -494,40 +502,40 @@ class OfferSection extends StatelessWidget {
           SizedBox(height: 16.0),
           isTablet
               ? Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Expanded(
-                child: OfferCard(
-                  imagePath: 'assets/images/sushi.png',
-                  title: 'Sushi',
-                  rating: 4.8,
-                ),
-              ),
-              SizedBox(width: 16.0),
-              Expanded(
-                child: OfferCard(
-                  imagePath: 'assets/images/momo.png',
-                  title: 'Momo',
-                  rating: 4.6,
-                ),
-              ),
-            ],
-          )
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Expanded(
+                      child: OfferCard(
+                        imagePath: 'assets/images/sushi.png',
+                        title: 'Sushi',
+                        rating: 4.8,
+                      ),
+                    ),
+                    SizedBox(width: 16.0),
+                    Expanded(
+                      child: OfferCard(
+                        imagePath: 'assets/images/momo.png',
+                        title: 'Momo',
+                        rating: 4.6,
+                      ),
+                    ),
+                  ],
+                )
               : Column(
-            children: [
-              OfferCard(
-                imagePath: 'assets/images/sushi.png',
-                title: 'Sushi',
-                rating: 4.8,
-              ),
-              SizedBox(height: 16.0),
-              OfferCard(
-                imagePath: 'assets/images/momo.png',
-                title: 'Momo',
-                rating: 4.6,
-              ),
-            ],
-          ),
+                  children: [
+                    OfferCard(
+                      imagePath: 'assets/images/sushi.png',
+                      title: 'Sushi',
+                      rating: 4.8,
+                    ),
+                    SizedBox(height: 16.0),
+                    OfferCard(
+                      imagePath: 'assets/images/momo.png',
+                      title: 'Momo',
+                      rating: 4.6,
+                    ),
+                  ],
+                ),
         ],
       ),
     );

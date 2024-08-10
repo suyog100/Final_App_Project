@@ -43,7 +43,8 @@ class Profile extends StatelessWidget {
                             ? AssetImage(userProfileImagePath!)
                             : null,
                         child: userProfileImagePath == null
-                            ? Icon(Icons.person, size: 40, color: Colors.grey[600])
+                            ? Icon(Icons.person,
+                                size: 40, color: Colors.grey[600])
                             : null,
                       ),
                     ),
@@ -76,9 +77,11 @@ class Profile extends StatelessWidget {
                   _buildDivider(),
                   _buildInfoTile(Icons.location_on, 'Address', 'Siliguri'),
                   _buildDivider(),
-                  _buildInfoTile(Icons.work, 'Work', 'www.facebook.com/james0122'),
+                  _buildInfoTile(
+                      Icons.work, 'Work', 'www.facebook.com/james0122'),
                   _buildDivider(),
-                  _buildInfoTile(Icons.facebook, 'Facebook', 'www.facebook.com/james0122'),
+                  _buildInfoTile(
+                      Icons.facebook, 'Facebook', 'www.facebook.com/james0122'),
                 ],
               ),
             ),

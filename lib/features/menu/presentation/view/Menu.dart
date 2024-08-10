@@ -1,38 +1,122 @@
 import 'package:flutter/material.dart';
-import 'package:finalproject/features/cart/presentation/view/cart_view.dart';
-import '../../../home/presentation/view/dashborad_test.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../../../../app/constants/api_endpoint.dart';
+import '../../../cart/presentation/viewmodel/cart_view_model.dart';
+import '../state/product_state.dart';
+import '../viewmodel/menu_view_model.dart';
 
-class MenuPage extends StatefulWidget {
-  const MenuPage({super.key});
+class MenuPage extends ConsumerStatefulWidget {
+  const MenuPage({Key? key}) : super(key: key);
 
   @override
-  _MenuPageState createState() => _MenuPageState();
+  ConsumerState<MenuPage> createState() => _MenuPageState();
 }
 
-class _MenuPageState extends State<MenuPage> {
-  // Start with Menu selected
+class _MenuPageState extends ConsumerState<MenuPage> {
+  final ScrollController _scrollController = ScrollController();
+  final TextEditingController _searchController = TextEditingController();
 
+  bool isLoading = false;
+  int currentPage = 1;
+  bool hasMore = true;
+  String selectedCategory = '';
 
+  @override
+  void initState() {
+    super.initState();
+    _scrollController.addListener(_scrollListener);
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      ref.read(menuViewModelProvider.notifier).getProduct(page: 1);
+    });
+  }
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    _searchController.dispose();
+    super.dispose();
+  }
+
+  void _scrollListener() {
+    if (_scrollController.position.extentAfter < 500 && !isLoading && hasMore) {
+      _loadMoreProducts();
+    }
+  }
+
+  Future<void> _refreshProducts() async {
+    setState(() {
+      currentPage = 1;
+      hasMore = true;
+      selectedCategory = '';
+    });
+    await ref.read(menuViewModelProvider.notifier).refreshProduct();
+  }
+
+  void _loadMoreProducts() async {
+    setState(() {
+      isLoading = true;
+    });
+    int nextPage = currentPage + 1;
+    final result = await ref
+        .read(menuViewModelProvider.notifier)
+        .getProduct(page: nextPage);
+    if (result) {
+      setState(() {
+        isLoading = false;
+        currentPage = nextPage;
+      });
+    } else {
+      setState(() {
+        isLoading = false;
+        hasMore = false;
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
+    final state = ref.watch(menuViewModelProvider);
+
     return Scaffold(
       appBar: AppBar(
         title: Text('Menu'),
         backgroundColor: Colors.white,
         foregroundColor: Colors.black,
       ),
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            SearchBar(),
-            CategoryList(),
-            SortDropdown(),
-            FoodGrid(),
-          ],
+      body: RefreshIndicator(
+        onRefresh: _refreshProducts,
+        child: SingleChildScrollView(
+          controller: _scrollController,
+          physics: const AlwaysScrollableScrollPhysics(),
+          child: Column(
+            children: [
+              SearchBar(),
+              CategoryList(
+                onCategorySelected: (category) {
+                  setState(() {
+                    selectedCategory = category;
+                    currentPage = 1;
+                    hasMore = true;
+                  });
+                  ref
+                      .read(menuViewModelProvider.notifier)
+                      .getProductsByCategory(category, page: 1);
+                },
+              ),
+              SortDropdown(),
+              FoodGrid(
+                foodItems: state.lstproduct,
+                isLoading: isLoading,
+                hasMore: hasMore,
+              ),
+              if (isLoading)
+                const Center(
+                  child: CircularProgressIndicator(),
+                ),
+            ],
+          ),
         ),
       ),
-
     );
   }
 }
@@ -87,6 +171,10 @@ class SearchBar extends StatelessWidget {
 }
 
 class CategoryList extends StatelessWidget {
+  final Function(String) onCategorySelected;
+
+  CategoryList({required this.onCategorySelected});
+
   final List<Map<String, String>> categories = [
     {'icon': '🍔', 'label': 'Food'},
     {'icon': '🍓', 'label': 'Fruits'},
@@ -105,6 +193,7 @@ class CategoryList extends StatelessWidget {
           return CategoryChip(
             icon: categories[index]['icon']!,
             label: categories[index]['label']!,
+            onTap: () => onCategorySelected(categories[index]['label']!),
           );
         },
       ),
@@ -115,33 +204,38 @@ class CategoryList extends StatelessWidget {
 class CategoryChip extends StatelessWidget {
   final String icon;
   final String label;
+  final VoidCallback onTap;
 
-  CategoryChip({required this.icon, required this.label});
+  CategoryChip({required this.icon, required this.label, required this.onTap});
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      margin: EdgeInsets.symmetric(horizontal: 8.0),
-      padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(20),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.grey.withOpacity(0.2),
-            spreadRadius: 1,
-            blurRadius: 3,
-            offset: Offset(0, 1),
-          ),
-        ],
-      ),
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Text(icon, style: TextStyle(fontSize: 20)),
-          SizedBox(width: 8),
-          Text(label, style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500)),
-        ],
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        margin: EdgeInsets.symmetric(horizontal: 8.0),
+        padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(20),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.grey.withOpacity(0.2),
+              spreadRadius: 1,
+              blurRadius: 3,
+              offset: Offset(0, 1),
+            ),
+          ],
+        ),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(icon, style: TextStyle(fontSize: 20)),
+            SizedBox(width: 8),
+            Text(label,
+                style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500)),
+          ],
+        ),
       ),
     );
   }
@@ -172,48 +266,20 @@ class SortDropdown extends StatelessWidget {
   }
 }
 
-class FoodGrid extends StatelessWidget {
-  final List<Map<String, dynamic>> foodItems = [
-    {
-      'imagePath': 'assets/images/sushi.png',
-      'title': 'Sushi Platter',
-      'price': 15.99,
-      'description': 'Assorted fresh sushi',
-    },
-    {
-      'imagePath': 'assets/images/burger.png',
-      'title': 'Classic Burger',
-      'price': 9.99,
-      'description': 'Juicy beef patty with fresh veggies',
-    },
-    {
-      'imagePath': 'assets/images/pizza.png',
-      'title': 'Pepperoni Pizza',
-      'price': 12.50,
-      'description': 'Crispy crust with pepperoni and cheese',
-    },
-    {
-      'imagePath': 'assets/images/tacos.png',
-      'title': 'Greek Salad',
-      'price': 7.25,
-      'description': 'Fresh vegetables with feta cheese',
-    },
-    {
-      'imagePath': 'assets/images/pasta.png',
-      'title': 'Spaghetti Carbonara',
-      'price': 11.75,
-      'description': 'Creamy pasta with bacon and parmesan',
-    },
-    {
-      'imagePath': 'assets/images/momo.png',
-      'title': 'Grilled Steak',
-      'price': 18.99,
-      'description': 'Tender steak with herb butter',
-    },
-  ];
+class FoodGrid extends ConsumerWidget {
+  final List<dynamic> foodItems;
+  final bool isLoading;
+  final bool hasMore;
+
+  const FoodGrid({
+    Key? key,
+    required this.foodItems,
+    required this.isLoading,
+    required this.hasMore,
+  }) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return LayoutBuilder(
       builder: (context, constraints) {
         final crossAxisCount = constraints.maxWidth > 600 ? 2 : 1;
@@ -229,34 +295,31 @@ class FoodGrid extends StatelessWidget {
             crossAxisSpacing: 16,
             mainAxisSpacing: 8,
           ),
-          itemCount: foodItems.length,
+          itemCount: foodItems.length + (hasMore ? 1 : 0),
           itemBuilder: (context, index) {
-            final item = foodItems[index];
-            return FoodItem(
-              imagePath: item['imagePath'],
-              title: item['title'],
-              price: item['price'],
-              description: item['description'],
-            );
+            if (index < foodItems.length) {
+              final item = foodItems[index];
+              return FoodItem(
+                product: item,
+                ref: ref,
+              );
+            } else {
+              return Center(child: CircularProgressIndicator());
+            }
           },
         );
       },
     );
   }
-
 }
 
 class FoodItem extends StatelessWidget {
-  final String imagePath;
-  final String title;
-  final double price;
-  final String description;
+  final dynamic product;
+  final WidgetRef ref;
 
   FoodItem({
-    required this.imagePath,
-    required this.title,
-    required this.price,
-    required this.description,
+    required this.product,
+    required this.ref,
   });
 
   @override
@@ -268,29 +331,41 @@ class FoodItem extends StatelessWidget {
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Image.asset(imagePath, width: 70, height: 70, fit: BoxFit.cover),
+            Image.network('${ApiEndpoints.imageUrl}${product.productImage}',
+                width: 70, height: 70, fit: BoxFit.cover),
             SizedBox(width: 10),
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Text(title, style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14)),
+                  Text(product.productName,
+                      style:
+                          TextStyle(fontWeight: FontWeight.bold, fontSize: 14)),
                   SizedBox(height: 2),
-                  Text(description,
+                  Text(product.productDescription,
                       style: TextStyle(fontSize: 12, color: Colors.grey[600]),
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis),
                   SizedBox(height: 2),
-                  Text('\$${price.toStringAsFixed(2)}',
-                      style: TextStyle(fontWeight: FontWeight.bold, color: Colors.green, fontSize: 12)),
+                  Text('\$${product.productPrice.toStringAsFixed(2)}',
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          color: Colors.green,
+                          fontSize: 12)),
                 ],
               ),
             ),
             SizedBox(width: 10),
             ElevatedButton(
               onPressed: () {
-                print('Added $title to cart');
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                      content: Text('Product is already in favorites')),
+                );
+                final cartViewModel = ref.read(cartViewModelProvider.notifier);
+                cartViewModel.addProductToCart(product.productId);
+                cartViewModel.openCartView();
               },
               child: Text('Add', style: TextStyle(fontSize: 12)),
               style: ElevatedButton.styleFrom(
@@ -304,5 +379,4 @@ class FoodItem extends StatelessWidget {
       ),
     );
   }
-
 }
