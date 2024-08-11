@@ -206,6 +206,8 @@ class DeliveryScreen extends StatelessWidget {
                 BestSellerSection(),
                 SizedBox(height: 16.0),
                 OfferSection(),
+                SizedBox(height: 16.0),
+                ReviewSection(),
               ],
             ),
           ),
@@ -596,6 +598,142 @@ class OfferCard extends StatelessWidget {
               style: TextStyle(fontSize: 14),
             ),
           ],
+        ),
+      ],
+    );
+  }
+}
+
+class ReviewSection extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: EdgeInsets.all(16.0),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(10.0),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.grey.withOpacity(0.2),
+            spreadRadius: 2,
+            blurRadius: 5,
+            offset: Offset(0, 3),
+          ),
+        ],
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            'Reviews',
+            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+          ),
+          SizedBox(height: 16.0),
+          ReviewCard(
+            reviewerName: 'John Doe',
+            rating: 4.5,
+            reviewText: 'Great food and quick delivery! Highly recommended.',
+          ),
+          SizedBox(height: 16.0),
+          ReviewCard(
+            reviewerName: 'Jane Smith',
+            rating: 5.0,
+            reviewText: 'Absolutely loved the sushi. Will order again!',
+          ),
+          SizedBox(height: 16.0),
+          WriteReviewSection(),
+        ],
+      ),
+    );
+  }
+}
+
+class ReviewCard extends StatelessWidget {
+  final String reviewerName;
+  final double rating;
+  final String reviewText;
+
+  const ReviewCard({
+    Key? key,
+    required this.reviewerName,
+    required this.rating,
+    required this.reviewText,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: EdgeInsets.all(12.0),
+      decoration: BoxDecoration(
+        color: Colors.grey[100],
+        borderRadius: BorderRadius.circular(8.0),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                reviewerName,
+                style: TextStyle(fontWeight: FontWeight.bold),
+              ),
+              Row(
+                children: [
+                  Icon(Icons.star, color: Colors.orange, size: 18),
+                  SizedBox(width: 4.0),
+                  Text(
+                    rating.toString(),
+                    style: TextStyle(fontWeight: FontWeight.bold),
+                  ),
+                ],
+              ),
+            ],
+          ),
+          SizedBox(height: 8.0),
+          Text(reviewText),
+        ],
+      ),
+    );
+  }
+}
+
+class WriteReviewSection extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          'Write a Review',
+          style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+        ),
+        SizedBox(height: 8.0),
+        TextField(
+          decoration: InputDecoration(
+            hintText: 'Enter your review here...',
+            border: OutlineInputBorder(),
+          ),
+          maxLines: 3,
+        ),
+        SizedBox(height: 8.0),
+        Row(
+          children: [
+            Text('Rating: '),
+            for (int i = 1; i <= 5; i++)
+              Icon(Icons.star_border, color: Colors.orange),
+          ],
+        ),
+        SizedBox(height: 8.0),
+        ElevatedButton(
+          onPressed: () {
+            // Submit review logic here
+          },
+          child: Text('Submit Review'),
+          style: ElevatedButton.styleFrom(
+            foregroundColor: Colors.white,
+            backgroundColor: Colors.orange,
+          ),
         ),
       ],
     );
