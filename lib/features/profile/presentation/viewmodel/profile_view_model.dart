@@ -2,7 +2,6 @@ import 'dart:io';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-
 import '../../domain/entity/profile_entity.dart';
 import '../../domain/usecase/get_profile_usecase.dart';
 import '../state/profile_state.dart';
@@ -28,14 +27,14 @@ class ProfileViewModel extends StateNotifier<ProfileState> {
       },
       (profile) {
         state = state.copyWith(isLoading: false, profile: profile, error: null);
-        print("Profile loaded: ${profile.fullName}");
+        print("Profile loaded: ${profile.username}");
         print('Profile Image URL: ${profile.profileImage}');
       },
     );
   }
 
-  Future<bool> editProfile(ProfileEntity profile,File? imageFile) async {
-    var result = await profileUsecase.updateProfile(profile,imageFile);
+  Future<bool> editProfile(ProfileEntity profile, File? imageFile) async {
+    var result = await profileUsecase.updateProfile(profile, imageFile);
     return result.fold(
       (failure) {
         state = state.copyWith(error: failure.error);

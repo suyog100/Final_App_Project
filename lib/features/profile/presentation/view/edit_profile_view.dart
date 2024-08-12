@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
 
-
 import '../../../../app/constants/api_endpoint.dart';
 import '../../domain/entity/profile_entity.dart';
 import '../viewmodel/profile_view_model.dart';
@@ -19,6 +18,8 @@ class _EditProfilePageState extends ConsumerState<EditProfilePage> {
   final _formKey = GlobalKey<FormState>();
   late TextEditingController _fullNameController;
   late TextEditingController _emailController;
+  late TextEditingController _phoneController;
+  late TextEditingController _locationController;
   File? _imageFile;
 
   @override
@@ -26,9 +27,11 @@ class _EditProfilePageState extends ConsumerState<EditProfilePage> {
     super.initState();
     _fullNameController = TextEditingController();
     _emailController = TextEditingController();
+    _phoneController = TextEditingController();
+    _locationController = TextEditingController();
     final profile = ref.read(profileViewModelProvider.notifier).state.profile;
     if (profile != null) {
-      _fullNameController.text = profile.fullName;
+      _fullNameController.text = profile.username;
       _emailController.text = profile.email;
     }
   }
@@ -37,6 +40,9 @@ class _EditProfilePageState extends ConsumerState<EditProfilePage> {
   void dispose() {
     _fullNameController.dispose();
     _emailController.dispose();
+    _phoneController.dispose();
+    _locationController.dispose();
+
     super.dispose();
   }
 
@@ -55,8 +61,10 @@ class _EditProfilePageState extends ConsumerState<EditProfilePage> {
       final profile = ProfileEntity(
         userId:
             ref.read(profileViewModelProvider.notifier).state.profile!.userId,
-        fullName: _fullNameController.text,
+        username: _fullNameController.text,
         email: _emailController.text,
+        phone: _phoneController.text,
+        location: _locationController.text,
         profileImage: ref
             .read(profileViewModelProvider.notifier)
             .state
@@ -92,7 +100,7 @@ class _EditProfilePageState extends ConsumerState<EditProfilePage> {
     }
 
     return Scaffold(
-       backgroundColor: const Color.fromARGB(255, 227, 223, 223),
+      backgroundColor: const Color.fromARGB(255, 227, 223, 223),
       appBar: AppBar(
         title: const Text('Edit Profile'),
         actions: [

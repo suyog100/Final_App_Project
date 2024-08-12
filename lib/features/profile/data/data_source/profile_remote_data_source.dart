@@ -2,12 +2,13 @@ import 'dart:io';
 import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:gift_bazar/core/failure/failure.dart';
-import 'package:gift_bazar/core/networking/remote/http_service.dart';
-import 'package:gift_bazar/core/shared_prefs/user_shared_prefs.dart';
-import 'package:gift_bazar/features/profile/data/dto/profile_dto.dart';
-import 'package:gift_bazar/features/profile/domain/entity/profile_entity.dart';
-import 'package:gift_bazar/app/constant/api_endpoint.dart';
+
+import '../../../../app/constants/api_endpoint.dart';
+import '../../../../core/failure/failure.dart';
+import '../../../../core/networking/remote/http_service.dart';
+import '../../../../core/shared_prefs/user_shared_prefs.dart';
+import '../../domain/entity/profile_entity.dart';
+import '../dto/profile_dto.dart';
 
 final profileRemoteDataSourceProvider = Provider(
   (ref) => ProfileRemoteDataSource(
@@ -77,7 +78,8 @@ class ProfileRemoteDataSource {
     }
   }
 
-  Future<Either<Failure, bool>> editProfile(ProfileEntity profile, File? imageFile) async {
+  Future<Either<Failure, bool>> editProfile(
+      ProfileEntity profile, File? imageFile) async {
     try {
       String? token;
       var data = await userSharedPrefs.getUserToken();
@@ -95,7 +97,8 @@ class ProfileRemoteDataSource {
       if (imageFile != null) {
         imageUrl = await _uploadImage(profile.userId, imageFile, token!);
         if (imageUrl == null) {
-          return Left(Failure(error: "Failed to upload image", statusCode: "0"));
+          return Left(
+              Failure(error: "Failed to upload image", statusCode: "0"));
         }
       }
 
@@ -129,10 +132,12 @@ class ProfileRemoteDataSource {
     }
   }
 
-  Future<String?> _uploadImage(String userId, File imageFile, String token) async {
+  Future<String?> _uploadImage(
+      String userId, File imageFile, String token) async {
     try {
       FormData formData = FormData.fromMap({
-        'profileImage': await MultipartFile.fromFile(imageFile.path, filename: imageFile.path.split('/').last),
+        'profileImage': await MultipartFile.fromFile(imageFile.path,
+            filename: imageFile.path.split('/').last),
       });
 
       var response = await dio.post(
@@ -146,7 +151,7 @@ class ProfileRemoteDataSource {
       } else {
         return null;
       }
-    } on DioError catch (e) {
+    } on DioException catch (e) {
       return null;
     }
   }
