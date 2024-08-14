@@ -3,7 +3,6 @@ import 'dart:io';
 import 'package:dartz/dartz.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-
 import '../../../../core/failure/failure.dart';
 import '../entity/profile_entity.dart';
 import '../repository/profile_repository.dart';
@@ -23,8 +22,8 @@ class ProfileUsecase {
     return await profileRepository.getUser();
   }
 
-  Future<Either<Failure, bool>> updateProfile(
-      ProfileEntity profile, File? imageFile) async {
-    return await profileRepository.editProfile(profile, imageFile);
-  }
+  // Future<Either<Failure, bool>> updateProfile(
+  //     ProfileEntity profile, File? imageFile) async {
+  //   return await profileRepository.editProfile(profile, imageFile);
+  // }
 }

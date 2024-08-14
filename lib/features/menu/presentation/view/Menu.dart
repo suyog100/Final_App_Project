@@ -360,8 +360,7 @@ class FoodItem extends StatelessWidget {
             ElevatedButton(
               onPressed: () {
                 ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(
-                      content: Text('Product is already in favorites')),
+                  const SnackBar(content: Text('Product added')),
                 );
                 final cartViewModel = ref.read(cartViewModelProvider.notifier);
                 cartViewModel.addProductToCart(product.productId);

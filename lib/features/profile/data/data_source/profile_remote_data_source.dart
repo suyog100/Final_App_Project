@@ -53,11 +53,11 @@ class ProfileRemoteDataSource {
       }
 
       var response = await dio.get(
-        '${ApiEndpoints.getUser}$id',
+        '${ApiEndpoints.getUser}',
         options: Options(headers: {'Authorization': 'Bearer $token'}),
       );
 
-      if (response.statusCode == 201) {
+      if (response.statusCode == 200) {
         ProfileDTO profileDTO = ProfileDTO.fromJson(response.data);
         return Right(profileDTO.userData.toEntity());
       } else {
@@ -78,59 +78,59 @@ class ProfileRemoteDataSource {
     }
   }
 
-  Future<Either<Failure, bool>> editProfile(
-      ProfileEntity profile, File? imageFile) async {
-    try {
-      String? token;
-      var data = await userSharedPrefs.getUserToken();
-      data.fold(
-        (l) => token = null,
-        (r) => token = r!,
-      );
+  // Future<Either<Failure, bool>> editProfile(
+  //     ProfileEntity profile, File? imageFile) async {
+  //   try {
+  //     String? token;
+  //     var data = await userSharedPrefs.getUserToken();
+  //     data.fold(
+  //       (l) => token = null,
+  //       (r) => token = r!,
+  //     );
 
-      if (token == null) {
-        return Left(Failure(error: "Token is null", statusCode: "0"));
-      }
+  //     if (token == null) {
+  //       return Left(Failure(error: "Token is null", statusCode: "0"));
+  //     }
 
-      String? imageUrl;
+  //     String? imageUrl;
 
-      if (imageFile != null) {
-        imageUrl = await _uploadImage(profile.userId, imageFile, token!);
-        if (imageUrl == null) {
-          return Left(
-              Failure(error: "Failed to upload image", statusCode: "0"));
-        }
-      }
+  //     if (imageFile != null) {
+  //       imageUrl = await _uploadImage(profile.userId, imageFile, token!);
+  //       if (imageUrl == null) {
+  //         return Left(
+  //             Failure(error: "Failed to upload image", statusCode: "0"));
+  //       }
+  //     }
 
-      var response = await dio.post(
-        '${ApiEndpoints.updateProfile}${profile.userId}',
-        data: {
-          'fullName': profile.fullName,
-          'email': profile.email,
-          if (imageUrl != null) 'profileImage': imageUrl,
-        },
-        options: Options(headers: {'Authorization': 'Bearer $token'}),
-      );
+  //     var response = await dio.post(
+  //       '${ApiEndpoints.updateProfile}${profile.userId}',
+  //       data: {
+  //         'fullName': profile.fullName,
+  //         'email': profile.email,
+  //         if (imageUrl != null) 'profileImage': imageUrl,
+  //       },
+  //       options: Options(headers: {'Authorization': 'Bearer $token'}),
+  //     );
 
-      if (response.statusCode == 200) {
-        return const Right(true);
-      } else {
-        return Left(
-          Failure(
-            error: response.data["message"],
-            statusCode: response.statusCode.toString(),
-          ),
-        );
-      }
-    } on DioError catch (e) {
-      return Left(
-        Failure(
-          error: e.error.toString(),
-          statusCode: e.response?.statusCode.toString() ?? '0',
-        ),
-      );
-    }
-  }
+  //     if (response.statusCode == 200) {
+  //       return const Right(true);
+  //     } else {
+  //       return Left(
+  //         Failure(
+  //           error: response.data["message"],
+  //           statusCode: response.statusCode.toString(),
+  //         ),
+  //       );
+  //     }
+  //   } on DioError catch (e) {
+  //     return Left(
+  //       Failure(
+  //         error: e.error.toString(),
+  //         statusCode: e.response?.statusCode.toString() ?? '0',
+  //       ),
+  //     );
+  //   }
+  // }
 
   Future<String?> _uploadImage(
       String userId, File imageFile, String token) async {

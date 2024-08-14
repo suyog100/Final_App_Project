@@ -9,39 +9,43 @@ import '../navigator/register_navigator.dart';
 import '../state/auth_state.dart';
 
 final authViewModelProvider = StateNotifierProvider<AuthViewModel, AuthState>(
-  (ref) => AuthViewModel(ref.read(loginViewNavigatorProvider),
-      ref.read(authUseCaseProvider), ref.read(registerViewNavigatorProvider)),
+  (ref) => AuthViewModel(
+    ref.read(loginViewNavigatorProvider),
+    ref.read(authUseCaseProvider),
+    ref.read(registerViewNavigatorProvider),
+  ),
 );
 
 class AuthViewModel extends StateNotifier<AuthState> {
-  AuthViewModel(this.navigator, this.authUseCase, this.registerViewNavigator)
+  AuthViewModel(this.loginNavigator, this.authUseCase, this.registerNavigator)
       : super(AuthState.initial());
   final AuthUseCase authUseCase;
-  final LoginViewNavigator navigator;
-  final RegisterViewNavigator registerViewNavigator;
+  final LoginViewNavigator loginNavigator;
+  final RegisterViewNavigator registerNavigator;
 
-  Future<void> registerUser(AuthEntity user) async {
+  Future<String> registerUser(AuthEntity user) async {
     state = state.copyWith(isLoading: true);
     var data = await authUseCase.registerUser(user);
-    data.fold(
+    return data.fold(
       (failure) {
         state = state.copyWith(
           isLoading: false,
           error: failure.error,
         );
-        showMySnackBar(message: failure.error, color: Colors.red);
+        if (failure.error != null) {
+          showMySnackBar(message: failure.error, color: Colors.red);
+        }
+        return "error";
       },
       (success) {
         state = state.copyWith(isLoading: false, error: null);
         showMySnackBar(message: "Successfully registered");
+        return "success";
       },
     );
   }
 
-  Future<void> loginUser(
-    String email,
-    String password,
-  ) async {
+  Future<void> loginUser(String email, String password) async {
     state = state.copyWith(isLoading: true);
     var data = await authUseCase.loginUser(email, password);
     data.fold(
@@ -57,14 +61,14 @@ class AuthViewModel extends StateNotifier<AuthState> {
   }
 
   void openRegisterView() {
-    navigator.openRegisterView();
+    loginNavigator.openRegisterView();
   }
 
   void openHomeView() {
-    navigator.openHomeView();
+    loginNavigator.openHomeView();
   }
 
   void openLoginView() {
-    registerViewNavigator.openLoginView();
+    registerNavigator.openLoginView();
   }
 }

@@ -71,24 +71,6 @@ class CartViewModel extends StateNotifier<CartState> {
     );
   }
 
-  void incrementQuantity(int index) {
-    final cartItems = [...state.cartItems];
-    cartItems[index] = cartItems[index].copyWith(
-      quantity: cartItems[index].quantity + 1,
-    );
-    state = state.copyWith(cartItems: cartItems);
-  }
-
-  void decrementQuantity(int index) {
-    final cartItems = [...state.cartItems];
-    if (cartItems[index].quantity > 1) {
-      cartItems[index] = cartItems[index].copyWith(
-        quantity: cartItems[index].quantity - 1,
-      );
-      state = state.copyWith(cartItems: cartItems);
-    }
-  }
-
   void openCartView() {
     navigator.openCartView();
   }

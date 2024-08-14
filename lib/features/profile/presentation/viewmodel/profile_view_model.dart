@@ -33,18 +33,18 @@ class ProfileViewModel extends StateNotifier<ProfileState> {
     );
   }
 
-  Future<bool> editProfile(ProfileEntity profile, File? imageFile) async {
-    var result = await profileUsecase.updateProfile(profile, imageFile);
-    return result.fold(
-      (failure) {
-        state = state.copyWith(error: failure.error);
-        print("Error: ${failure.error}");
-        return false;
-      },
-      (success) {
-        fetchProfile(); // Refetch profile to update the state
-        return true;
-      },
-    );
-  }
+  // Future<bool> editProfile(ProfileEntity profile, File? imageFile) async {
+  //   var result = await profileUsecase.updateProfile(profile, imageFile);
+  //   return result.fold(
+  //     (failure) {
+  //       state = state.copyWith(error: failure.error);
+  //       print("Error: ${failure.error}");
+  //       return false;
+  //     },
+  //     (success) {
+  //       fetchProfile(); // Refetch profile to update the state
+  //       return true;
+  //     },
+  //   );
+  // }
 }

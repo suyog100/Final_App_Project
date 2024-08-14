@@ -971,7 +971,7 @@ class _CartViewState extends ConsumerState<CartView> {
               onPressed: () {
                 // Add your submit logic here
               },
-              child: Text('Submit'),
+              child: Text('Proceed to'),
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.orange,
                 minimumSize: Size(double.infinity, 50),

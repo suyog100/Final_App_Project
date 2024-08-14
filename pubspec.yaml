@@ -55,6 +55,7 @@ dependencies:
   all_sensors2: ^1.0.1
   local_auth: ^2.2.0
   http: ^0.13.3
+  network_image_mock: ^2.1.1
 
 
 dev_dependencies:

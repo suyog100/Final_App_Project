@@ -1,3 +1,5 @@
+import 'package:finalproject/features/forgotPassword/data/model/forgot_model.dart';
+import 'package:finalproject/features/forgotPassword/presentation/view/verification_view.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -189,18 +191,37 @@ class _LoginViewState extends ConsumerState<LoginView> {
                 ),
               ),
               const SizedBox(height: 1),
-              Align(
-                alignment: Alignment.centerRight,
-                child: Text(
-                  "Recovery Password               ",
-                  textAlign: TextAlign.center,
+              // Align(
+              //   alignment: Alignment.centerRight,
+              //   child: Text(
+              //     "Recovery Password               ",
+              //     textAlign: TextAlign.center,
+              //     style: TextStyle(
+              //       fontWeight: FontWeight.bold,
+              //       fontSize: 16,
+              //       color: textColor2,
+              //     ),
+              //   ),
+              // ),
+              TextButton(
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const VerificationView(),
+                    ),
+                  );
+                },
+                child: const Text(
+                  "Recovery Password",
                   style: TextStyle(
-                    fontWeight: FontWeight.bold,
+                    color: Colors.lightBlueAccent,
                     fontSize: 16,
-                    color: textColor2,
+                    fontWeight: FontWeight.bold,
                   ),
                 ),
               ),
+
               SizedBox(height: size.height * 0.02),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 25),

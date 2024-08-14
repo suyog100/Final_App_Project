@@ -1,28 +1,15 @@
 import 'package:finalproject/features/cart/presentation/view/cart_view.dart';
 import 'package:finalproject/features/menu/presentation/view/Menu.dart';
 import 'package:finalproject/features/profile/presentation/view/profile.dart';
+import 'package:finalproject/features/search/presentation/view/search_view.dart';
 
 import 'package:flutter/material.dart';
-import 'dart:async';
 
-import 'package:all_sensors2/all_sensors2.dart';
-import 'package:finalproject/app/app.dart';
-import 'package:finalproject/features/home/presentation/widget/product_cart.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
+
 import 'package:flutter/painting.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
-
-import '../../../../core/common/dialog.dart';
-import '../../../../core/common/my_snackbar.dart';
-import '../../domain/entity/paginated_products.dart';
-import 'package:finalproject/features/home/presentation/viewmodel/home_view_model.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-
-import '../../../../app/constants/api_endpoint.dart';
-import '../../../../core/common/product_cart.dart';
 
 class DashboardTest extends StatefulWidget {
   const DashboardTest({super.key});
@@ -37,6 +24,7 @@ class _DashboardTestState extends State<DashboardTest> {
   static const List<Widget> _widgetOptions = <Widget>[
     DeliveryScreen(),
     MenuPage(),
+    SearchView(),
     CartView(),
     Profile(),
   ];
@@ -63,6 +51,10 @@ class _DashboardTestState extends State<DashboardTest> {
             BottomNavigationBarItem(
               icon: Icon(Icons.menu),
               label: 'Menu',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.search),
+              label: 'Search',
             ),
             BottomNavigationBarItem(
               icon: Icon(Icons.shopping_cart),
@@ -201,6 +193,10 @@ class DeliveryScreen extends StatelessWidget {
             padding: const EdgeInsets.symmetric(horizontal: 16.0),
             child: Column(
               children: [
+                // Carousel Section
+                SizedBox(height: 16.0),
+                CarouselSection(),
+                SizedBox(height: 16.0),
                 CategorySection(),
                 SizedBox(height: 16.0),
                 BestSellerSection(),
@@ -212,6 +208,54 @@ class DeliveryScreen extends StatelessWidget {
             ),
           ),
         ],
+      ),
+    );
+  }
+}
+
+class CarouselSection extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: 180.0, // Adjust the height as per your need
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(10.0),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.grey.withOpacity(0.2),
+            spreadRadius: 2,
+            blurRadius: 5,
+            offset: Offset(0, 3),
+          ),
+        ],
+      ),
+      child: PageView(
+        children: [
+          // Replace these with your image URLs
+          CarouselItem(imageUrl: 'assets/images/sushi.png'),
+          CarouselItem(imageUrl: 'assets/images/tacos.png'),
+          CarouselItem(imageUrl: 'assets/images/momo.png'),
+        ],
+      ),
+    );
+  }
+}
+
+class CarouselItem extends StatelessWidget {
+  final String imageUrl;
+
+  const CarouselItem({
+    Key? key,
+    required this.imageUrl,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(10.0),
+      child: Image.asset(
+        imageUrl,
+        fit: BoxFit.cover,
       ),
     );
   }
@@ -604,7 +648,72 @@ class OfferCard extends StatelessWidget {
   }
 }
 
-class ReviewSection extends StatelessWidget {
+class ReviewSection extends StatefulWidget {
+  @override
+  _ReviewSectionState createState() => _ReviewSectionState();
+}
+
+class _ReviewSectionState extends State<ReviewSection> {
+  final List<Map<String, dynamic>> reviews = [
+    {
+      'reviewerName': 'John Doe',
+      'rating': 4.5,
+      'reviewText': 'Great food and quick delivery! Highly recommended.',
+    },
+    {
+      'reviewerName': 'Jane Smith',
+      'rating': 5.0,
+      'reviewText': 'Absolutely loved the sushi. Will order again!',
+    },
+  ];
+
+  void _addReview(String reviewerName, double rating, String reviewText) {
+    setState(() {
+      reviews.add({
+        'reviewerName': reviewerName,
+        'rating': rating,
+        'reviewText': reviewText,
+      });
+    });
+  }
+
+  void _showReviewDialog(BuildContext context, Map<String, dynamic> review) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text(review['reviewerName']),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                children: [
+                  Icon(Icons.star, color: Colors.orange, size: 18),
+                  SizedBox(width: 4.0),
+                  Text(
+                    review['rating'].toString(),
+                    style: TextStyle(fontWeight: FontWeight.bold),
+                  ),
+                ],
+              ),
+              SizedBox(height: 8.0),
+              Text(review['reviewText']),
+            ],
+          ),
+          actions: [
+            TextButton(
+              child: Text('Close'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -629,19 +738,23 @@ class ReviewSection extends StatelessWidget {
             style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
           ),
           SizedBox(height: 16.0),
-          ReviewCard(
-            reviewerName: 'John Doe',
-            rating: 4.5,
-            reviewText: 'Great food and quick delivery! Highly recommended.',
+          ListView.builder(
+            shrinkWrap: true,
+            physics: NeverScrollableScrollPhysics(),
+            itemCount: reviews.length,
+            itemBuilder: (context, index) {
+              return Padding(
+                padding: const EdgeInsets.only(bottom: 16.0),
+                child: ReviewCard(
+                  reviewerName: reviews[index]['reviewerName'],
+                  rating: reviews[index]['rating'],
+                  reviewText: reviews[index]['reviewText'],
+                  onTap: () => _showReviewDialog(context, reviews[index]),
+                ),
+              );
+            },
           ),
-          SizedBox(height: 16.0),
-          ReviewCard(
-            reviewerName: 'Jane Smith',
-            rating: 5.0,
-            reviewText: 'Absolutely loved the sushi. Will order again!',
-          ),
-          SizedBox(height: 16.0),
-          WriteReviewSection(),
+          WriteReviewSection(onSubmit: _addReview),
         ],
       ),
     );
@@ -652,53 +765,81 @@ class ReviewCard extends StatelessWidget {
   final String reviewerName;
   final double rating;
   final String reviewText;
+  final VoidCallback onTap;
 
   const ReviewCard({
     Key? key,
     required this.reviewerName,
     required this.rating,
     required this.reviewText,
+    required this.onTap,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: EdgeInsets.all(12.0),
-      decoration: BoxDecoration(
-        color: Colors.grey[100],
-        borderRadius: BorderRadius.circular(8.0),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(
-                reviewerName,
-                style: TextStyle(fontWeight: FontWeight.bold),
-              ),
-              Row(
-                children: [
-                  Icon(Icons.star, color: Colors.orange, size: 18),
-                  SizedBox(width: 4.0),
-                  Text(
-                    rating.toString(),
-                    style: TextStyle(fontWeight: FontWeight.bold),
-                  ),
-                ],
-              ),
-            ],
-          ),
-          SizedBox(height: 8.0),
-          Text(reviewText),
-        ],
+    return InkWell(
+      onTap: onTap,
+      child: Container(
+        padding: EdgeInsets.all(12.0),
+        decoration: BoxDecoration(
+          color: Colors.grey[100],
+          borderRadius: BorderRadius.circular(8.0),
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  reviewerName,
+                  style: TextStyle(fontWeight: FontWeight.bold),
+                ),
+                Row(
+                  children: [
+                    Icon(Icons.star, color: Colors.orange, size: 18),
+                    SizedBox(width: 4.0),
+                    Text(
+                      rating.toString(),
+                      style: TextStyle(fontWeight: FontWeight.bold),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+            SizedBox(height: 8.0),
+            Text(
+              reviewText,
+              maxLines: 2,
+              overflow: TextOverflow.ellipsis,
+            ),
+          ],
+        ),
       ),
     );
   }
 }
 
-class WriteReviewSection extends StatelessWidget {
+class WriteReviewSection extends StatefulWidget {
+  final Function(String, double, String) onSubmit;
+
+  const WriteReviewSection({Key? key, required this.onSubmit})
+      : super(key: key);
+
+  @override
+  _WriteReviewSectionState createState() => _WriteReviewSectionState();
+}
+
+class _WriteReviewSectionState extends State<WriteReviewSection> {
+  final _reviewController = TextEditingController();
+  double _rating = 0;
+
+  @override
+  void dispose() {
+    _reviewController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -710,6 +851,7 @@ class WriteReviewSection extends StatelessWidget {
         ),
         SizedBox(height: 8.0),
         TextField(
+          controller: _reviewController,
           decoration: InputDecoration(
             hintText: 'Enter your review here...',
             border: OutlineInputBorder(),
@@ -721,13 +863,29 @@ class WriteReviewSection extends StatelessWidget {
           children: [
             Text('Rating: '),
             for (int i = 1; i <= 5; i++)
-              Icon(Icons.star_border, color: Colors.orange),
+              GestureDetector(
+                onTap: () {
+                  setState(() {
+                    _rating = i.toDouble();
+                  });
+                },
+                child: Icon(
+                  i <= _rating ? Icons.star : Icons.star_border,
+                  color: Colors.orange,
+                ),
+              ),
           ],
         ),
         SizedBox(height: 8.0),
         ElevatedButton(
           onPressed: () {
-            // Submit review logic here
+            if (_reviewController.text.isNotEmpty && _rating > 0) {
+              widget.onSubmit('User', _rating, _reviewController.text);
+              _reviewController.clear();
+              setState(() {
+                _rating = 0;
+              });
+            }
           },
           child: Text('Submit Review'),
           style: ElevatedButton.styleFrom(

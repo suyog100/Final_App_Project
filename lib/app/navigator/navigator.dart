@@ -1,5 +1,5 @@
+import 'package:finalproject/features/auth/presentation/view/login_view.dart';
 import 'package:flutter/material.dart';
-
 
 import '../navigator_key/navigator_key.dart';
 
@@ -28,4 +28,6 @@ class NavigateRoute {
       AppNavigator.navigatorKey.currentState!.context,
     );
   }
+
+  static void pushReplacementRoute(LoginView loginView) {}
 }

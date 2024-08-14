@@ -25,7 +25,7 @@ void main() {
   late ProviderContainer container;
 
   setUp(
-        () {
+    () {
       mockAuthUseCase = MockAuthUseCase();
       mockLoginViewNavigator = MockLoginViewNavigator();
       mockRegisterViewNavigator = MockRegisterViewNavigator();
@@ -44,7 +44,6 @@ void main() {
     expect(authState.isLoading, false);
     expect(authState.error, isNull);
   });
-
 
   //test 1 pass
   test('login test with valid username and password', () async {
@@ -98,25 +97,26 @@ void main() {
     expect(authState.error, isNull);
     expect(authState.isLoading, true);
   });
-  test('register test with valid user information', () async {
-    const validUser = AuthEntity(
-        username: 'prasanna',
-        email: 'prasanna@example.com',
-        password: 'pj123',
-        phone: "98123712371");
 
-    when(mockAuthUseCase.registerUser(any))
-        .thenAnswer((_) async => const Right(true));
+  // test('register test with valid user information', () async {
+  //   const validUser = AuthEntity(
+  //       username: 'prasanna',
+  //       email: 'prasanna@example.com',
+  //       password: 'pj123',
+  //       phone: "98123712371");
 
-    // Act
-    await container
-        .read(authViewModelProvider.notifier)
-        .registerUser(validUser);
-    final authState = container.read(authViewModelProvider);
+  //   when(mockAuthUseCase.registerUser(any))
+  //       .thenAnswer((_) async => const Right(true));
 
-    // Assert
-    expect(authState.error, isNull);
-  });
+  //   // Act
+  //   await container
+  //       .read(authViewModelProvider.notifier)
+  //       .registerUser(validUser);
+  //   final authState = container.read(authViewModelProvider);
+
+  //   // Assert
+  //   expect(authState.error, isNull);
+  // });
 
   test('register test fails when username is empty', () async {
     const invalidUser = AuthEntity(

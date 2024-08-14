@@ -1,13 +1,11 @@
-
 import 'package:json_annotation/json_annotation.dart';
 
 import '../model/profile_model.dart';
-
-
+part 'profile_dto.g.dart';
 
 @JsonSerializable()
 class ProfileDTO {
-  @JsonKey(name: "userDetails")
+  @JsonKey(name: "data")
   final ProfileModel userData;
   final bool success;
 

@@ -3,7 +3,6 @@ import 'dart:io';
 import 'package:dartz/dartz.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-
 import '../../../../core/failure/failure.dart';
 import '../../domain/entity/profile_entity.dart';
 import '../../domain/repository/profile_repository.dart';
@@ -22,8 +21,8 @@ class ProfileRemoteRepository implements IProfileRepository {
     return _profileRemoteDataSource.getUser();
   }
 
-  @override
-  Future<Either<Failure, bool>> editProfile(ProfileEntity profile,File? imageFile) {
-  return _profileRemoteDataSource.editProfile(profile,imageFile);
-}
+//   @override
+//   Future<Either<Failure, bool>> editProfile(ProfileEntity profile,File? imageFile) {
+//   return _profileRemoteDataSource.editProfile(profile,imageFile);
+// }
 }
