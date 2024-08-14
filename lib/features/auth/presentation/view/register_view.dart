@@ -972,7 +972,7 @@ class _RegisterViewState extends ConsumerState<RegisterView> {
               ),
             );
 
-            if (result == 'success') {
+            if (result == true) {
               ScaffoldMessenger.of(context).showSnackBar(
                 const SnackBar(
                   content: Text('Registered successfully!'),

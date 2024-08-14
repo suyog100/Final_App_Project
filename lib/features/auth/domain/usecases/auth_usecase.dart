@@ -5,7 +5,6 @@ import '../../../../core/failure/failure.dart';
 import '../entity/auth_entity.dart';
 import '../repository/auth_repository.dart';
 
-
 final authUseCaseProvider = Provider((ref) {
   return AuthUseCase(ref.read(authRepositoryProvider));
 });
@@ -16,11 +15,11 @@ class AuthUseCase {
   AuthUseCase(this._authRepository);
 
   Future<Either<Failure, bool>> registerUser(AuthEntity? user) async {
-    return await _authRepository.registerUser(user!);
+    return _authRepository.registerUser(user!);
   }
 
   Future<Either<Failure, bool>> loginUser(
       String? email, String? password) async {
-    return await _authRepository.loginUser(email!, password!);
+    return _authRepository.loginUser(email!, password!);
   }
 }

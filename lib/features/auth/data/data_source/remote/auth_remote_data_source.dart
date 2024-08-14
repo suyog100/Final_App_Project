@@ -33,9 +33,10 @@ class AuthRemoteDataSource {
           "phone": user.phone,
           "username": user.username,
           "password": user.password,
+          "location": user.location,
         },
       );
-      if (response.statusCode == 200) {
+      if (response.statusCode == 201) {
         return const Right(true);
       } else {
         return Left(

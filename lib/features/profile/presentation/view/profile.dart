@@ -96,7 +96,7 @@ class _ProfileState extends ConsumerState<Profile> {
               _buildInfoTile(Icons.phone, 'Mobile', profile.phone),
               _buildDivider(),
               _buildInfoTile(
-                  Icons.location_on, 'Address', profile.location ?? ""),
+                  Icons.location_on, 'Location', profile.location ?? ""),
               _buildDivider(),
             ],
           ),

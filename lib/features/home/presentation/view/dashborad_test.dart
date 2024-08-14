@@ -108,7 +108,7 @@ class DeliveryScreen extends StatelessWidget {
                   padding: EdgeInsets.all(16.0),
                   child: Column(
                     children: [
-                      // Search bar
+                      // Search on app
                       Container(
                         padding: EdgeInsets.symmetric(
                             horizontal: 16.0, vertical: 8.0),
